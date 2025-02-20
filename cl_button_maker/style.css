@@ -1,0 +1,67 @@
+.red_border {
+  background-color: #c5050c;
+  font-size: 20px;
+  color: white;
+  font-family: inherit;
+}
+
+#image {
+  float: left;
+}
+
+#uwlibrarieslogo {
+  width: auto;
+  height: 70px;
+}
+
+#nav {
+  /* margin-top: 1rem; */
+  text-align: center;
+}
+
+.foot {
+  background-color: #333333;
+}
+
+#button_title {
+  font-size: x-large;
+  margin-left: 2%;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.greybox {
+  background-color: #333333;
+  color: white;
+  margin-top: 1rem;
+  padding-top: 0.75%;
+  padding-bottom: 0.75%;
+}
+
+.shiftleft {
+  margin-left: 1%;
+}
+
+#body {
+  margin-left: 2%;
+  margin-right: 20%;
+}
+
+#hi {
+  color: #d6d6d6;
+}
+
+#uwfootlogo {
+  height: 5rem;
+  float: left;
+}
+
+.middlefoot {
+  float: center;
+  text-align: center;
+}
+
+.rightfoot {
+  float: right;
+  text-align: right;
+}
