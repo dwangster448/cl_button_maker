@@ -52,8 +52,7 @@
 }
 
 #uwfootlogo {
-  height: 5rem;
-  float: left;
+  height: 12rem;
 }
 
 .middlefoot {
@@ -75,4 +74,28 @@
 
 body {
   font-family: "UW_Font", sans-serif;
+}
+.foot {
+  background-color: #333333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.foot div {
+  flex: 1;
+  text-align: center;
+}
+
+.foot div:first-child {
+  text-align: left;
+}
+
+.foot div:last-child {
+  text-align: right;
+}
+
+.rightfootertext {
+  font-size: 20px;
 }
