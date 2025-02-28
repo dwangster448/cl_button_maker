@@ -51,7 +51,8 @@
       </div>
     </header>
 
-    <main style="display: flex; flex-direction: column; align-items: center; height: 60vh; margin: 20px 0;">
+    <main class="main-container">
+      <!-- Calendar Section -->
       <div class="calendar-container">
         <div class="calendar-header">
           <button id="prevMonth" class="calendar-nav">◀</button>
@@ -59,9 +60,29 @@
           <button id="nextMonth" class="calendar-nav">▶</button>
         </div>
         <div id="calendar"></div>
+        <button id="reserveButton" class="reserve-button">Reserve</button>
       </div>
-      <button id="reserveButton" class="reserve-button">Reserve</button>
-    </main>
+    
+      <!-- Reservation Box Section -->
+      <div class="reservation-box">
+        <h1>Reservation Details</h1>
+        <p>Select dates on the calendar and fill this out.</p>
+      
+        <form class="reservation-form">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" placeholder="Enter your name" required>
+      
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" placeholder="Enter your email" required>
+      
+          <label for="phone">Phone:</label>
+          <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+      
+          <button type="submit" class="reserve-button">Submit Reservation</button>
+        </form>
+      </div>
+      </main>
+      
     
 
     <footer class="footer foot">
