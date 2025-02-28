@@ -1,3 +1,13 @@
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+
 .red_border {
   background-color: #c5050c;
   font-size: 20px;
@@ -5,23 +15,104 @@
   font-family: inherit;
 }
 
+
 #image {
   float: left;
+  max-width: 100%;
+  height: auto;
 }
+
 
 #uwlibrarieslogo {
   width: auto;
   height: 70px;
 }
 
+
 #nav {
-  /* margin-top: 1rem; */
+  margin-top: 1rem;
   text-align: center;
 }
 
+
+#body {
+  flex: 1;
+  margin-left: 2%;
+  margin-right: 20%;
+}
+
+
 .foot {
   background-color: #333333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40px 80px;
+  color: rgb(173, 173, 173);
+  font-size: 16px;
+  position: relative;
+  bottom: 0;
+  width: 100%;
 }
+
+
+.footer-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  justify-content: center; 
+  text-align: center;
+  flex: 1;
+}
+
+/* Adjusts UW Madison Footer Logo Size */
+.footer-logo {
+  width: auto;
+  max-width: 150px;
+  height: auto;
+}
+
+
+.footer-center {
+  text-align: center;
+  flex: 2;
+}
+
+
+.footer-center ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-center ul li {
+  margin: 5px 0;
+}
+
+
+.footer-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers text and image horizontally */
+  justify-content: center; /* Centers content vertically */
+  text-align: center;
+  flex: 1;
+}
+
+
+.footer-right h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: rgb(173, 173, 173);
+}
+
+
+.support-icon {
+  width: auto;
+  max-width: 60px; /* Adjust as needed */
+  height: auto;
+  margin-top: 5px;
+}
+
 
 #button_title {
   font-size: x-large;
@@ -29,6 +120,7 @@
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
+
 
 .greybox {
   background-color: #333333;
@@ -38,32 +130,16 @@
   padding-bottom: 0.75%;
 }
 
+
 .shiftleft {
   margin-left: 1%;
 }
 
-#body {
-  margin-left: 2%;
-  margin-right: 20%;
-}
 
 #hi {
   color: #d6d6d6;
 }
 
-#uwfootlogo {
-  height: 12rem;
-}
-
-.middlefoot {
-  float: center;
-  text-align: center;
-}
-
-.rightfoot {
-  float: right;
-  text-align: right;
-}
 
 @font-face {
   font-family: "UW_Font";
@@ -72,30 +148,49 @@
   font-style: normal;
 }
 
+
 body {
   font-family: "UW_Font", sans-serif;
 }
-.foot {
-  background-color: #333333;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-}
 
-.foot div {
-  flex: 1;
+
+@media screen and (max-width: 768px) {
+  .foot {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-left,
+  .footer-center,
+  .footer-right {
+    flex: none;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .footer-logo {
+    max-width: 120px; 
+  }
+
+  .support-icon {
+    max-width: 50px; 
+  }
+}
+/* Secondary Footer (Below Main Footer) */
+.secondary-footer {
+  background-color: #444; /* Slightly lighter than the main footer */
+  color: rgb(200, 200, 200);
   text-align: center;
+  padding: 15px 0;
+  font-size: 14px;
 }
 
-.foot div:first-child {
-  text-align: left;
+/* Links inside the secondary footer */
+.secondary-footer a {
+  color: rgb(200, 200, 200);
+  text-decoration: none;
 }
 
-.foot div:last-child {
-  text-align: right;
-}
-
-.rightfootertext {
-  font-size: 20px;
+.secondary-footer a:hover {
+  text-decoration: underline;
 }
