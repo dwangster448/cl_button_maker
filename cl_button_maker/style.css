@@ -65,3 +65,14 @@
   float: right;
   text-align: right;
 }
+
+@font-face {
+  font-family: "UW_Font";
+  src: url("fonts/RedHatDisplay-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: "UW_Font", sans-serif;
+}
