@@ -76,3 +76,67 @@
 body {
   font-family: "UW_Font", sans-serif;
 }
+
+/* Calendar Styling */
+
+.calendar-container {
+  width: 80%;
+  background-color: #f0f0f0;
+  border: 2px solid #ccc;
+  padding: 20px;
+  text-align: center;
+}
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.calendar-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  font-weight: bold;
+  background-color: #ddd;
+  padding: 5px;
+}
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+.calendar-day {
+  padding: 10px;
+  background: white;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+.calendar-day.empty {
+  background: transparent;
+  border: none;
+}
+.day-header {
+  background-color: #bbb;
+}
+.calendar-nav {
+  cursor: pointer;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+}
+
+.reserve-button {
+  margin-top: 10px;
+  padding: 8px 15px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.reserve-button:hover {
+  background-color: #0056b3;
+}
+
