@@ -1,0 +1,148 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    src
+</head>
+<body>
+    <header>
+      <div class="red_border">University of Wisconsin - Madison</div>
+
+      <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+          <img
+            src="uwlibrarieslogo.png"
+            alt="uwlibrarieslogo"
+            id="uwlibrarieslogo"
+          />
+          <!-- navbar burger -->
+          <a
+            class="navbar-burger"
+            role="button"
+            aria-label="menu"
+            aria-expanded="false"
+          >
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+          <!-- admin sign in modal -->
+          <div class="modal" id="sign-in-modal">
+            <div class="modal-background"></div>
+            <div class="modal-content py-5 px-5"></div>
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <h2 class="modal-card-title has-text-centered">Sign In</h2>
+                    <!-- <button class="delete" id="signin-close" aria-label="close"></button> -->
+                </header>
+                <form id="signin-form">
+                    <section class="modal-card-body has-text-left">
+                        <!-- email -->
+                        <div class="field">
+                            <label class="label">Email</label>
+                            <div class="control">
+                                <input type="email" class="input" id="email-signin">
+                            </div>
+                        </div>
+                        <!-- password -->
+                         <div class="field">
+                            <label class="label">Password</label>
+                            <div class="control">
+                                <input type="password" class="input" id="password-signin">
+                            </div>
+                         </div>
+                         <button class="button is-link">Submit</button>
+                    </section>
+                </form>
+            </div>
+        </div>
+          <!-- right side buttons -->
+          <div class="navbar-menu">
+            <div class="navbar-item">
+              <a class="button" href="index.html">Home</a> &nbsp;
+              <a class="button" href="booknow.html">Book Now</a> &nbsp;
+              <a class="button">Admin Login</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div class="greybox">
+        <p class="shiftleft">College Libary at Helen C. White Hall</p>
+      </div>
+    </header>
+    <header id="button_title">Button Maker</header>
+    <div id="body">
+      <img
+        src="https://cms.library.wisc.edu/college/wp-content/uploads/sites/5/2014/11/button_maker.jpg"
+        alt="Button Maker"
+        id="image"
+      />
+      <p>
+        1 inch & 2.25 inch button makers are available by reservation for
+        UW-Madison students, staff, and faculty.
+      </p>
+      <br />
+      <p>
+        To reserve one of the button makers, check the calendar for
+        availability, and submit the reservation form. If there are no conflicts
+        with the date you want, then the item will be reserved for you and you
+        will be notified via email. If there is some conflict, you also will be
+        notified by email.
+      </p>
+      <br />
+      <p>
+        The standard maximum loan period is 3 days (minor extensions can
+        sometimes be arranged). Consecutive reservations for the same item by
+        the same person are not allowed.
+      </p>
+      <br />
+      <br />
+      <p>
+        It is important that you check the calendar before filling out the
+        reservation form.
+      </p>
+      <br />
+      <p>
+        Also note that these reservation requests are monitored during regular
+        business hours (8am-5pm Monday – Friday). You should typically expect a
+        response within one business day.
+      </p>
+      <br />
+      <p>
+        You will need your Wiscard to check out the button maker at the
+        library’s Info Desk on the first floor of College Library. Button
+        supplies may be purchased from the vending machine located near the main
+        entrance (diagonally across from the Info Desk):
+      </p>
+      <br />
+      <p>
+        1 inch – $1.00 for 25 buttons 2.25 inch – $1.50 for 25 buttons If you
+        plan to make more than 200 buttons, you will need to order supplies a
+        week in advance directly from American Button Machines:
+      </p>
+      <br />
+      <p>
+        1 inch pinback buttons 2.25 inch pinback buttons You may also find other
+        useful information, including button making templates and instructional
+        videos, on the American Button Machines site.
+      </p>
+      <br />
+    </div>
+    <footer class="footer foot">
+      <div>
+        <img src="uwfooterlogo2.png" alt="uwfooterlogo" id="uwfootlogo" />
+        <div class="middlefoot">University of wisconsin - madison</div>
+        <div class="rightfoot">default text here</div>
+      </div>
+    </footer>
+    <script src="adminapp.js"></script>
+  </body>
+</html>
