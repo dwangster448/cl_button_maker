@@ -76,3 +76,8 @@
 body {
   font-family: "UW_Font", sans-serif;
 }
+
+ul {
+  margin-left: 2%;
+  list-style-type: disc;
+}
