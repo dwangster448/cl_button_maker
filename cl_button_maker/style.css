@@ -1,4 +1,3 @@
-
 html,
 body {
   height: 100%;
@@ -178,10 +177,10 @@ body {
 }
 /* Secondary Footer (Below Main Footer) */
 .secondary-footer {
-  background-color: #444; /* Slightly lighter than the main footer */
+  background-color: #444; 
   color: rgb(200, 200, 200);
-  text-align: center;
-  padding: 15px 0;
+  text-align: left; 
+  padding: 15px 80px; 
   font-size: 14px;
 }
 
