@@ -5,8 +5,12 @@ body {
   display: flex;
   flex-direction: column;
 }
-
-
+.greybox {
+  background-color: #333333;
+  color: white;
+  padding: 10px 20px;
+  font-size: 18px;
+}
 .red_border {
   background-color: #c5050c;
   font-size: 20px;
@@ -14,25 +18,21 @@ body {
   font-family: inherit;
 }
 
-
 #image {
   float: left;
   max-width: 100%;
   height: auto;
 }
 
-
 #uwlibrarieslogo {
   width: auto;
   height: 70px;
 }
 
-
 #nav {
   margin-top: 1rem;
   text-align: center;
 }
-
 
 #body {
   flex: 1;
@@ -40,7 +40,7 @@ body {
   margin-right: 20%;
 }
 
-
+/* Footer Styling */
 .foot {
   background-color: #333333;
   display: flex;
@@ -52,139 +52,171 @@ body {
   position: relative;
   bottom: 0;
   width: 100%;
+  gap: 40px;
 }
 
-
+/* Left Footer */
 .footer-left {
   display: flex;
   flex-direction: column;
-  align-items: center; 
-  justify-content: center; 
+  align-items: center;
+  justify-content: center;
   text-align: center;
   flex: 1;
 }
 
-/* Adjusts UW Madison Footer Logo Size */
+.footer-left a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .footer-logo {
   width: auto;
   max-width: 150px;
   height: auto;
 }
 
-
-.footer-center {
-  text-align: center;
-  flex: 2;
-}
-
-
-.footer-center ul {
-  list-style: none;
-  padding: 0;
-}
-
-.footer-center ul li {
-  margin: 5px 0;
-}
-
-
-.footer-right {
+/* Middle Left Footer */
+.footer-middle-left {
+  flex: 1.5;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centers text and image horizontally */
-  justify-content: center; /* Centers content vertically */
+  text-align: left;
+  margin-left: 50px;
+}
+
+.footer-middle-left h3 {
+  margin-bottom: 10px;
+}
+
+.footer-middle-left ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-middle-left ul li {
+  margin-bottom: 5px;
+}
+
+/* Feedback message */
+.feedback {
+  font-size: 14px;
+  color: rgb(173, 173, 173);
+  margin-top: 15px;
+}
+
+.feedback a {
+  color: rgb(173, 173, 173);
+  text-decoration: none;
+}
+
+.feedback a:hover {
+  text-decoration: underline;
+}
+
+/* Middle Right Footer */
+.footer-middle-right {
+  flex: 1.5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  padding-left: 20px;
+}
+
+/* Contact Us */
+.contact-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: rgb(173, 173, 173);
+  font-size: 22px;
+  margin-bottom: 10px;
+  margin-left: 7px;
+}
+
+.contact-link .icon {
+  width: auto;
+  height: 35px;
+  max-width: 40px;
+  object-fit: contain;
+  margin-right: 8px;
+}
+
+/* Social Icons */
+.social-icons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.social-icons .icon {
+  width: 35px;
+  height: 35px;
+  margin: 0 8px;
+}
+
+/* Right Footer */
+.footer-right {
   text-align: center;
   flex: 1;
 }
 
-
-.footer-right h1 {
-  font-size: 24px;
+.footer-right h3 {
+  font-size: 20px;
   margin-bottom: 10px;
   color: rgb(173, 173, 173);
 }
 
-
 .support-icon {
   width: auto;
-  max-width: 60px; /* Adjust as needed */
+  max-width: 60px;
   height: auto;
   margin-top: 5px;
 }
 
-
-#button_title {
-  font-size: x-large;
-  margin-left: 2%;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-}
-
-
-.greybox {
-  background-color: #333333;
-  color: white;
-  margin-top: 1rem;
-  padding-top: 0.75%;
-  padding-bottom: 0.75%;
-}
-
-
-.shiftleft {
-  margin-left: 1%;
-}
-
-
-#hi {
-  color: #d6d6d6;
-}
-
-
-@font-face {
-  font-family: "UW_Font";
-  src: url("fonts/RedHatDisplay-Regular.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-}
-
-
-body {
-  font-family: "UW_Font", sans-serif;
-}
-
-
 @media screen and (max-width: 768px) {
   .foot {
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
+    gap: 30px;
   }
 
   .footer-left,
-  .footer-center,
+  .footer-middle-left,
+  .footer-middle-right,
   .footer-right {
-    flex: none;
     width: 100%;
-    margin-bottom: 20px;
+    text-align: center;
+    margin: 0 auto;
   }
 
-  .footer-logo {
-    max-width: 120px; 
+  .footer-middle-left {
+    margin-left: 0;
   }
 
-  .support-icon {
-    max-width: 50px; 
+  .footer-middle-right {
+    align-items: center;
+    padding-left: 0;
+  }
+
+  .social-icons {
+    justify-content: center;
   }
 }
-/* Secondary Footer (Below Main Footer) */
+
+/* Secondary Footer */
 .secondary-footer {
-  background-color: #444; 
+  background-color: #444;
   color: rgb(200, 200, 200);
-  text-align: left; 
-  padding: 15px 80px; 
+  text-align: left;
+  padding: 15px 80px;
   font-size: 14px;
 }
-
-/* Links inside the secondary footer */
 .secondary-footer a {
   color: rgb(200, 200, 200);
   text-decoration: none;
