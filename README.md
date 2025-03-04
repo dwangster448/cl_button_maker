@@ -1,7 +1,10 @@
 SPRINT 2 INFO
 Stories
+
 Story 1: As a user, I want a clean and easy to navigate calendar to be able to create reservations for the button maker. 
+
 Story 2: As a UW Madison Admin, I want the website to have the correct fonts that match the rest of UW Madison web pages.
+
 Story 3: As an Admin, I want there to be different privileges for administrators and students, so administrators can accept or deny reservations and see additional information.
 
 Tasks
