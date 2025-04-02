@@ -1,0 +1,29 @@
+Staff (User Reservation) Collection
+{
+    "first_name": String,
+    "last_name": String,
+    "phone_number": Integer,
+    "user_id": Integer,
+    "email": String,
+    "reservation": [String] 
+
+}
+
+Calendar Collection
+{
+     "first_name": String,
+    "last_name": String,
+    "start_date": String,
+    "end_date": String,
+    "button_type": String 
+}
+
+Reservation Collection
+{
+    "reservation_id": String,
+    "start_date": String,
+    "end_date": String,
+    "button_type": String 
+    "status": Boolean,
+    
+}
