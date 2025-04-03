@@ -10,6 +10,7 @@
     />
     <link rel="stylesheet" href="style.css" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <script src="app.js"></script>
   </head>
   <body>
     <header>
@@ -47,7 +48,107 @@
         <p class="shiftleft">College Libary at Helen C. White Hall</p>
       </div>
     </header>
-    <header id="button_title">Button Maker</header>
+
+    <main class="main-container">
+      <!-- Calendar Section -->
+      <div class="calendar-container">
+        <div class="calendar-header">
+          <button id="prevMonth" class="calendar-nav">◀</button>
+          <h2 id="monthYear"></h2>
+          <button id="nextMonth" class="calendar-nav">▶</button>
+        </div>
+        <div id="calendar"></div>
+      </div>
+
+      <!-- Reservation Box Section -->
+      <div class="reservation-box">
+        <h1>Reservation Details</h1>
+        <p>Select dates on the calendar and fill this out.</p>
+        <form class="reservation-form">
+          <label for="name">Name:</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Enter your name"
+            required
+          />
+
+          <label for="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Enter your email"
+            required
+          />
+
+          <label for="phone">Phone:</label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            placeholder="Enter your phone number"
+            required
+          />
+
+          <label for="button-size"
+            >Which button maker would you like to reserve?</label
+          >
+          <input
+            type="radio"
+            id="size-1"
+            name="button-size"
+            value="1"
+            required
+          />
+          <label for="size-1">1"</label>
+          <input type="radio" id="size-2.25" name="button-size" value="2.25" />
+          <label for="size-2.25">2.25"</label>
+
+          <label for="comments">Other comments or questions:</label>
+          <textarea
+            id="comments"
+            name="comments"
+            placeholder="Type your comments or questions here..."
+            rows="4"
+          ></textarea>
+
+          <div>
+            <input
+              type="checkbox"
+              id="return-agreement"
+              name="return-agreement"
+              required
+            />
+            <label for="return-agreement">
+              Click here to indicate that you agree to return the button maker
+              and circle cutter in working condition, and to accept financial
+              responsibility for the cost of any repairs and/or replacements
+              that are needed. College Library is not liable for any damages or
+              injuries sustained from using the button maker or circle cutter.
+            </label>
+          </div>
+
+          <div>
+            <input
+              type="checkbox"
+              id="uw-info-agreement"
+              name="uw-info-agreement"
+              required
+            />
+            <label for="uw-info-agreement">
+              I understand my information is being used for University of
+              Wisconsin-Madison Libraries purposes.
+            </label>
+          </div>
+
+          <button type="submit" class="reserve-button">
+            Submit Reservation
+          </button>
+        </form>
+      </div>
+    </main>
 
     <footer class="footer foot">
       <div>
