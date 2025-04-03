@@ -1,3 +1,125 @@
+SPRINT 2 INFO
+Stories
+
+Story 1: As a user, I want a clean and easy to navigate calendar to be able to create reservations for the button maker. 
+
+Story 2: As a UW Madison Admin, I want the website to have the correct fonts that match the rest of UW Madison web pages.
+
+Story 3: As an Admin, I want there to be different privileges for administrators and students, so administrators can accept or deny reservations and see additional information.
+
+Tasks
+Add sign in  button (3)
+Import the UW Madison fonts (2)
+Create footer with logo (2)
+Create calendar (1)
+Add pop up modal for confirmation after reservation request (1,3)
+start javascript for calendar (1)
+start javascript for reservation form (1)
+
+Trello Link: https://trello.com/invite/b/679949217e98518d834ae43e/ATTI196c81b27621c8c607ec3b08046bd397EEEC33A7/is-424
+
+Daily Scrums:
+Questions to answer:
+	a.     What did you do yesterday?
+b.     What are you planning to do today?
+c.     Any problems are you facing?
+
+2/26
+Dara
+Yesterday, we prepared for the sprint by discussing the week ahead based on meeting notes.
+Today, we are planning to figure out how to import the correct fonts and import them into the project.
+No, we do not have any issues.
+
+Gabriel
+We planned when we would meet yesterday.
+We are going to make sure we figure out the fonts and match what the College Library staff have requested.
+We do not quite get how to find the font, so we will have to look it up and figure it out.
+
+Benjamin
+Yesterday, we discussed what we would do for the sprint and what needs to be accomplished.
+We are going to begin working on the calendar after we import the right fonts.
+We are unsure how to find the correct fonts to match the website.
+
+Victor
+We talked about when everyone is free to meet and reviewed what we need to do based on meeting with College Library staff.
+Today, we are handling the fonts and going to begin the calendar and create the basic design of it.
+We do not have any major problems we are facing.
+
+Daniel
+We went over notes from the meeting and discussed when everyone is free to meet.
+We are importing fonts from the UW Madison website today, as well as beginning the other html pages.
+No, there are no issues.
+
+2/28
+
+Dara
+Yesterday, I worked on the reservation form a bit and worked on the sprint document.
+Today, I am planning to finish the sprint document and add more to the reservation form with Benjamin
+Having issues with styling and spacing of reservation form.
+
+Gabriel
+Yesterday I worked a little on the styling for the footer with Victor
+Today, I am planning to get further with the footer and the sizing to make it similar to the previous footer 
+It is fairly difficult to ensure that the footer images and links are aligned correctly
+
+Benjamin
+Yesterday, I worked on the reservation form with Dara and worked on completing the sprint document.
+Today I am planning to add more to the reservation form with Dara
+Me and Dara had issues correcting the styling
+
+Victor
+I worked on the styling of the footer with Gabriel
+Today, I am planning on working with Gabriel to make more progress on the footer and the secondary footer 
+We were having to spend a lot of time messing with the centering and styling
+
+Daniel
+Looked over virtual meeting notes and feedback from client
+Begin programming js functions for DB and website interaction
+Need DB information and specifications
+
+3/3
+
+Dara
+Yesterday, I worked on the javascript for the calendar
+I will be working with Daniel and Benjamin on the javascript for the calendar and reservation form
+We have issues with the javascript and the styling
+
+Gabriel
+Yesterday, I looked at the progress and planned what I was going to do for the next day. 
+I am planning to complete the footer and add the social media images and the hyperlinks with Victor. 
+Yes, this was very tedious trying to make it look nice and resize nice
+
+Benjamin
+Yesterday, Dara, Daniel and I worked on the calendar 
+Today, we are planning on getting farther with the javascript for the calendar and the reservation form
+We had issues with the reservation form and the styling of it as it is spilling out of the box.
+
+Victor
+Yesterday, me and Gabriel looked over our progress and were planning on what we need to accomplish today. 
+Today, I am going to work on the footer with Gabriel 
+Yes, we both had a hard time trying to resize and make the footer look correct. 
+
+Daniel
+Yesterday, I worked with Benjamin and Dara on the reservation calendar
+Today, I plan on working with the javascript for the calendar and the reservation form
+We are having issues with the styling of the reservation form specifically 
+
+Evidence of Work Completed:
+
+Sprint Review:
+From the first sprint, we learned that it is better to spread out the work rather than do the majority of the work all on the same day. Therefore, we met a few more times than the first sprint, and we still had our heavy work day on Friday, but it felt more manageable. Staying in more constant communications made the sprint feel easier.
+
+I think we were very successful in our communications and ensuring that everyone dedicates time to this project. Everyone was flexible with timing to meet and willing to work around others schedules. I also think we were good at communicating when we had issues and asking for help.
+
+We had some issues with the git side of the project with pushing and pulling, we made some incorrect commits and accidentally pushed to the wrong branches, so we had to sort that out, but I think we now have a better understanding of how to do this correctly.
+
+Next time, before making a commit, we can check to make sure we are on the right branch and there will not be any merge conflicts. We can also be more communicative about when to push and pull so all group members understand the process and can have the most updated versions of our project. This will keep us up to date on the project and the tasks that need to be completed. I also think we did a good job with communications and can continue this into the next sprint. 
+
+Yes, we are very satisfied with what we have already completed because we met all of the tasks that we set out to complete and our webpage looks clean and matches all of the fonts correctly like we intended. Although we are still working on some of the functionality and code to complete the site entirely, what we have completed so far is what we meant to have accomplished by the end of this sprint.
+
+GitHub Repo URL: https://github.com/dwangster448/cl_button_maker.git
+
+SPRINT 1 INFO
 Description:
 College Library (CL) is currently cooperating as a client for our group. Pamela and Kelli, staff at CL, will be our main clients. They requested us to develop a new button-making system to replace their current implementation. Some features that they are looking for is accepting button-maker reservations, approving exceptions, adding reservations, and notifying patrons about reservation confirmations. The theme for this project development is stream-lining. Current reservations (Google Calendar) are handled manually via Kelli/Pamela. 
 Trello Board 
