@@ -77,7 +77,6 @@ body {
   font-family: "UW_Font", sans-serif;
 }
 
-<<<<<<< HEAD
 /*  LAYOUT  */
 .main-container {
   display: flex;
@@ -214,9 +213,7 @@ body {
 .reserve-button:hover {
   background-color: #0056b3;
 }
-=======
 ul {
   margin-left: 2%;
   list-style-type: disc;
 }
->>>>>>> bab77f1bdc8958f1184ffe63a7f5cc439f59cfa2

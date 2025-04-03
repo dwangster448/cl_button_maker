@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 // Calendar code 
 
@@ -92,6 +91,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
     renderCalendar();
 });
-=======
 // Java Script Page
->>>>>>> bab77f1bdc8958f1184ffe63a7f5cc439f59cfa2
