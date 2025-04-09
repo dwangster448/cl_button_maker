@@ -19,12 +19,12 @@
   <div class="modal-background" id="admin_modalbg"></div>
   <div class="modal-content p-6 has-background-white">
     <h1 class="is-size-3 title">Log In</h1>
-    <form id="signup_form">
-      <!-- Admin Username -->
+    <form id="login_form">
+      <!-- Admin Email -->
       <div class="field">
-        <label class="label" for="admin-username">Admin Username</label>
+        <label class="label" for="admin_email">Admin Email</label>
         <div class="control">
-          <input type="text" id="admin-username" name="admin-username" required />
+          <input type="text" id="admin_email" name="admin_email" required />
         </div>
       </div>
 
@@ -55,42 +55,47 @@
 </div>
 
 
-    <header>
-      <div class="red_border">University of Wisconsin - Madison</div>
+  <header>
+  <div class="red_border" style="padding: 10px;">
+    University of Wisconsin - Madison
+  </div>
 
-      <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-          <img
-            src="images/uwlibrarieslogo.png"
-            alt="uwlibrarieslogo"
-            id="uwlibrarieslogo"
-          />
-          <!-- navbar burger -->
-          <a
-            class="navbar-burger"
-            role="button"
-            aria-label="menu"
-            aria-expanded="false"
-          >
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-          </a>
-          <!-- right side buttons -->
-          <div class="navbar-menu">
-            <div class="navbar-item">
-              <a class="button button-spaced" href="index.html">Home</a> &nbsp;
-              <a class="button" href="booknow.html">Book Now</a> &nbsp;
-              <a class="button" id="admin-login-button">Admin Login</a>
-            </div>
-          </div>
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <img
+        src="images/uwlibrarieslogo.png"
+        alt="uwlibrarieslogo"
+        id="uwlibrarieslogo"
+        style="padding: 10px;"
+      />
+      <a
+        class="navbar-burger"
+        role="button"
+        aria-label="menu"
+        aria-expanded="false"
+      >
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <!-- right side buttons -->
+    <div class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <a class="button" href="index.html" style="margin-left: 15px;">Home</a>
+          <a class="button" href="booknow.html" style="margin-left: 15px;">Book Now</a>
+          <a class="button" id="admin-login-button" style="margin-left: 15px;">Admin Login</a>
         </div>
-      </nav>
-      <div class="greybox">
-        <p class="shiftleft">College Libary at Helen C. White Hall</p>
       </div>
-    </header>
+    </div>
+  </nav>
+
+  <div class="greybox">
+    <p class="shiftleft">College Library at Helen C. White Hall</p>
+  </div>
+</header>
     <header id="button_title">Button Maker</header>
     <div id="body">
       <img

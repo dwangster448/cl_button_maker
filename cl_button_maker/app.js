@@ -98,6 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   renderCalendar();
 });
+
 // Java Script Page
 // import { initializeApp } from "firebase/app";
 // import { getAuth } from "firebase/auth";
@@ -228,4 +229,42 @@ document.addEventListener("DOMContentLoaded", () => {
   r_e("admin_modalbg").addEventListener("click", () => {
     r_e("admin_modal").classList.remove("is-active");
   });
+});
+
+// admin login
+
+function r_e(id) {
+  return document.querySelector(`#${id}`);
+}
+
+r_e("login_form").addEventListener("submit", (e) => {
+  // prevent page from auto refresh
+  e.preventDefault();
+
+  // get the username and password
+  let email = r_e("email_").value;
+  let password = r_e("password_").value;
+
+  // log in the admin
+  auth
+    .signInWithEmailAndPassword(email, password)
+    .then(() => {
+      // show admin dashboard
+      r_e("admin_dashboard").classList.remove("is-hidden");
+      r_e("reserve_form").classList.add("is-hidden");
+
+      // configure message bar
+      console.log(`Admin ${auth.currentUser.email} is now logged in`);
+
+      // reset the form
+      r_e("login_form").reset();
+
+      // close the modal
+      r_e("admin_modal").classList.remove("is-active");
+    })
+    .catch((err) => {
+      r_e("signinerror").innerHTML = `Invalid username or password`;
+      // show the error message
+      r_e("signinerror").classList.remove("is-hidden");
+    });
 });
