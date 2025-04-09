@@ -215,6 +215,7 @@ function confirmation() {
 }
 
 // Admin Login Modal
+const adminButton = document.querySelector('#admin-login-button');
 document.addEventListener("DOMContentLoaded", () => {
   function r_e(id) {
     return document.querySelector(`#${id}`);
