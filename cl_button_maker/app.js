@@ -1,3 +1,4 @@
+console.log(firebase);
 // Calendar code
 document.addEventListener("DOMContentLoaded", function () {
   const calendarContainer = document.getElementById("calendar");
