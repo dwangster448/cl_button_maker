@@ -10,7 +10,6 @@
     />
     <link rel="stylesheet" href="style.css" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
-    <script src="app.js"></script>
   </head>
   <body>
     <header>
@@ -245,5 +244,45 @@
         >
       </p>
     </div>
+
+    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+
+    <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-storage.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-firestore.js"></script>
+
+    <script>
+      // TODO
+      // Copy **only** your firebaseConfig from Google Firebae and add it below
+
+      // Your web app's Firebase configuration 
+          const firebaseConfig = {
+            apiKey: "AIzaSyBPRVwELevQvOA8oBb_uMoFpQqMAidPLLA",
+            authDomain: "button-maker-510fd.firebaseapp.com",
+            projectId: "button-maker-510fd",
+            storageBucket: "button-maker-510fd.firebasestorage.app",
+            messagingSenderId: "14696430845",
+            appId: "1:14696430845:web:2fa15780e1a17a2baf5294"
+          };
+
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      // define authentication variable
+      let auth = firebase.auth();
+      let db = firebase.firestore();
+
+      // define a storage reference
+      let ref = firebase.storage().ref();
+
+  </script>
+      <script src="app.js"></script>
   </body>
 </html>
