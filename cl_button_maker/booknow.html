@@ -62,95 +62,116 @@
       </div>
 
       <!-- Reservation Box Section -->
-      <div class="reservation-box">
-        <h1>Reservation Details</h1>
-        <p>Select dates on the calendar and fill this out.</p>
-        <form class="reservation-form">
-          <label for="name">Name:</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            placeholder="Enter your name"
-            required
-          />
 
-          <label for="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            placeholder="Enter your email"
-            required
-          />
-
-          <label for="phone">Phone:</label>
-          <input
-            type="tel"
-            id="phone"
-            name="phone"
-            placeholder="Enter your phone number"
-            required
-          />
-
-          <label for="button-size"
-            >Which button maker would you like to reserve?</label
-          >
-          <input
-            type="radio"
-            id="size-1"
-            name="button-size"
-            value="1"
-            required
-          />
-          <label for="size-1">1"</label>
-          <input type="radio" id="size-2.25" name="button-size" value="2.25" />
-          <label for="size-2.25">2.25"</label>
-
-          <label for="comments">Other comments or questions:</label>
-          <textarea
-            id="comments"
-            name="comments"
-            placeholder="Type your comments or questions here..."
-            rows="4"
-          ></textarea>
-
-          <div>
-            <input
-              type="checkbox"
-              id="return-agreement"
-              name="return-agreement"
-              required
-            />
-            <label for="return-agreement">
-              Click here to indicate that you agree to return the button maker
-              and circle cutter in working condition, and to accept financial
-              responsibility for the cost of any repairs and/or replacements
-              that are needed. College Library is not liable for any damages or
-              injuries sustained from using the button maker or circle cutter.
-            </label>
-          </div>
-
-          <div>
-            <input
-              type="checkbox"
-              id="uw-info-agreement"
-              name="uw-info-agreement"
-              required
-            />
-            <label for="uw-info-agreement">
-              I understand my information is being used for University of
-              Wisconsin-Madison Libraries purposes.
-            </label>
-          </div>
-
-          <button type="submit" class="reserve-button">
-            Submit Reservation
-          </button>
-        </form>
-      </div>
     </main>
-
+    <div class="column has-background-info-light is-one-quarter mt-5">
+      <p class="panel-heading">
+        Reservation Details
+        <br />
+        Select dates on the calendar and fill this out.
+      </p>
+      <form id="review">
+        <div class="field">
+          <label class="label">Name</label>
+          <div class="control has-icons-left has-icons-right">
+            <input class="input" type="text" placeholder="Name" />
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Email</label>
+          <div class="control has-icons-left has-icons-right">
+            <input class="input" type="text" placeholder="Email" />
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Phone Number</label>
+          <div class="control has-icons-left has-icons-right">
+            <input class="input" type="text" placeholder="Phone Number" />
+          </div>
+        </div>
+        <div class="field">
+          <label class="label"
+            >Which Button Maker Would You Like to Reserve?</label
+          >
+          <div class="control">
+            <input
+              type="radio"
+              id="size-1"
+              name="button-size"
+              value="1"
+              required
+            />
+            <label for="size-1">1"</label>
+            <input
+              type="radio"
+              id="size-2.25"
+              name="button-size"
+              value="2.25"
+            />
+            <label for="size-2.25">2.25"</label>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">At what time do you want to pick up the button maker?</label>
+          <div class="control">
+            <textarea
+              class="textarea"
+              placeholder="Please format the time as 00:00"
+            ></textarea>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">At what time do you want to pick up the button maker?</label>
+          <div class="control">
+            <textarea
+              class="textarea"
+              placeholder="Please format the time as 00:00"
+            ></textarea>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">At what time do you want to return the button maker?</label>
+          <div class="control">
+            <textarea
+              class="textarea"
+              placeholder="Please format the time as 00:00"
+            ></textarea>
+          </div>
+        </div>
+        <div class="field">
+          <label for="return-agreement">
+            Click here to indicate that you agree to return the button maker and
+            circle cutter in working condition, and to accept financial
+            responsibility for the cost of any repairs and/or replacements that
+            are needed. College Library is not liable for any damages or
+            injuries sustained from using the button maker or circle cutter.
+          </label>
+          <input
+            type="checkbox"
+            id="return-agreement"
+            name="return-agreement"
+            required
+          />
+        </div>
+        <div class="field">
+          <label for="uw-info-agreement">
+            I understand my information is being used for University of
+            Wisconsin-Madison Libraries purposes.
+          <input
+            type="checkbox"
+            id="uw-info-agreement"
+            name="uw-info-agreement"
+            required
+          />
+          </label>
+        </div>
+        <div class="field is-grouped">
+          <div class="control">
+            <button class="button is-white">Submit</button>
+          </div>
+        </div>
+      </form>
+    </div>
     <footer class="footer foot">
       <!-- Left Footer -->
       <div class="footer-left">
