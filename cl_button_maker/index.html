@@ -13,6 +13,48 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
   </head>
   <body>
+
+<!-- Admin login modal -->
+<div class="modal" id="admin_modal">
+  <div class="modal-background" id="admin_modalbg"></div>
+  <div class="modal-content p-6 has-background-white">
+    <h1 class="is-size-3 title">Log In</h1>
+    <form id="signup_form">
+      <!-- Admin Username -->
+      <div class="field">
+        <label class="label" for="admin-username">Admin Username</label>
+        <div class="control">
+          <input type="text" id="admin-username" name="admin-username" required />
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="field">
+        <label class="label" for="password">Password</label>
+        <div class="control">
+          <input type="password" id="password" name="password" required />
+        </div>
+      </div>
+
+      <!-- Error message -->
+      <p
+        id="login_error"
+        class="has-text-danger has-text-weight-bold mt-3 mb-3 is-hidden"
+      ></p>
+
+      <!-- Submit -->
+      <div class="field">
+        <div class="control">
+          <button type="submit" class="m-3 button is-link" id="submit_login">
+            Submit
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+
     <header>
       <div class="red_border">University of Wisconsin - Madison</div>
 
@@ -40,7 +82,7 @@
             <div class="navbar-item">
               <a class="button button-spaced" href="index.html">Home</a> &nbsp;
               <a class="button" href="booknow.html">Book Now</a> &nbsp;
-              <a class="button">Admin Login</a>
+              <a class="button" id="admin-login-button">Admin Login</a>
             </div>
           </div>
         </div>
