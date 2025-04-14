@@ -1,4 +1,106 @@
 console.log(firebase);
+
+function r_e(id) {
+  return document.querySelector(`#${id}`);
+}
+
+// sign up
+r_e("submit_user").addEventListener("click", () => {
+  let email = r_e("email").value;
+  let pass = r_e("pass").value;
+  //console.log(email, pass);
+
+  auth.createUserWithEmailAndPassword(email, pass).then((user) => {
+    console.log("user");
+    console.log(user.user.uid);
+    db.collection("users").doc(user.user.email).set({
+      admin: 0,
+    });
+  });
+});
+
+function make_admin(id) {
+  db.collection("users").doc(id).set({
+    admin: 1,
+  }).then(() => all_users('edit'));
+}
+
+function make_regular_user(id){
+   db.collection("users").doc(id).set({
+    admin: 0,
+  }).then(() => all_users('edit'));
+}
+
+function update_status(yn, admin, uid, email) {
+  // console.log("update status");
+  // console.log(yn, uid, email)
+  r_e("logged_in_user").innerHTML = yn;
+   r_e("is_user_admin").innerHTML = admin;
+  r_e("current_user_id").innerHTML = uid,
+  r_e("user_email").innerHTML = email;
+}
+
+r_e("login_form").addEventListener("submit", (e) => {
+  // prevent page from auto refresh
+  e.preventDefault();
+
+  // get the username and password
+  let email = r_e("admin_email").value;
+  let password = r_e("password").value;
+
+  // log in the admin
+  auth
+    .signInWithEmailAndPassword(email, password)
+    .then(() => {
+
+      // configure message bar
+      console.log(`Admin ${auth.currentUser.email} is now logged in`);
+
+    })
+    .catch((err) => {
+      r_e("login_error").innerContent = `Invalid username or password`;
+
+      // show the error message
+      r_e("login_error").classList.remove("is-hidden");
+    });
+});
+
+auth.onAuthStateChanged((user) => {
+  console.log("auth change found")
+  if (user) {
+    console.log(user);
+    // r_e("info").innerHTML = `<p>You are signed in as ${user.email} </p>`;
+    // db.collection("users").doc(user.email).get().then((d) => {
+      
+    //   // possible admin values are 0 or 1
+    //   // admin value of 1 means admin user. a value of 0 means no admin
+    //   let admin = d.data().admin;
+
+    //   if(admin == 0){
+    //     // a signed-in user can only view a list of users
+    //      //all_users('view');
+    //      console.log("User logged")
+    //   }else{
+    //      // a signed-in admin user can view and edit user roles
+    //      //all_users('edit');
+    //      console.log("User not logged in")
+    //   }
+
+      
+     
+    //   //update_status(1, admin, user.uid, user.email);
+      
+    // })
+    
+    
+  } else {
+    // don't show user information as user isn't currently authenticated
+    // all_users(0)
+    // update_status(0, "", "", "");
+    console.log("not user auth")
+  }
+});
+
 // Calendar code
 document.addEventListener("DOMContentLoaded", function () {
   const calendarContainer = document.getElementById("calendar");
@@ -234,38 +336,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // admin login
 
-function r_e(id) {
-  return document.querySelector(`#${id}`);
-}
 
-r_e("login_form").addEventListener("submit", (e) => {
-  // prevent page from auto refresh
-  e.preventDefault();
 
-  // get the username and password
-  let email = r_e("email_").value;
-  let password = r_e("password_").value;
 
-  // log in the admin
-  auth
-    .signInWithEmailAndPassword(email, password)
-    .then(() => {
-      // show admin dashboard
-      r_e("admin_dashboard").classList.remove("is-hidden");
-      r_e("reserve_form").classList.add("is-hidden");
 
-      // configure message bar
-      console.log(`Admin ${auth.currentUser.email} is now logged in`);
 
-      // reset the form
-      r_e("login_form").reset();
 
-      // close the modal
-      r_e("admin_modal").classList.remove("is-active");
-    })
-    .catch((err) => {
-      r_e("signinerror").innerHTML = `Invalid username or password`;
-      // show the error message
-      r_e("signinerror").classList.remove("is-hidden");
-    });
-});
+
+
