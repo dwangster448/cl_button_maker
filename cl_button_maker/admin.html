@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script src="app.js"></script> 
+    <script src="app.js"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>UW-Libraries Button Maker</title>
@@ -49,7 +49,45 @@
         <p class="shiftleft">College Libary at Helen C. White Hall</p>
       </div>
     </header>
-      <br />
+    <section class="section">
+      <div class="container">
+        <h1 class="title has-text-centered mb-5">Admin Dashboard</h1>
+        <div class="columns">
+          <!-- Calendar -->
+          <div class="column">
+            <div class="box">
+              <div class="level is-mobile is-justify-content-space-between mb-3">
+                <button class="button is-small" id="prevMonth">←</button>
+                <p id="monthYear" class="title is-5 has-text-centered">Month Year</p>
+                <button class="button is-small" id="nextMonth">→</button>
+              </div>
+              <div id="calendar"></div>
+            </div>
+          </div>
+    
+          <!-- Reservation Queue -->
+          <div class="column">
+            <div id="reservation_queue">
+              <div class="box">
+                <p class="title is-4">Reservation Request</p>
+                <p><strong>Name:</strong> Alex Johnson</p>
+                <p><strong>Email:</strong> alex.johnson@wisc.edu</p>
+                <p><strong>Start:</strong> April 15, 2025</p>
+                <p><strong>End:</strong> April 17, 2025</p>
+                <p><strong>Button Type:</strong> 2.25 inch</p>
+    
+                <div class="buttons mt-3">
+                  <button class="button is-success">Accept</button>
+                  <button class="button is-danger">Deny</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <br />
     <footer class="footer foot">
       <!-- Left Footer -->
       <div class="footer-left">
@@ -125,4 +163,5 @@
       </p>
     </div>
   </body>
+  <script src="adminapp.js"></script>
 </html>
