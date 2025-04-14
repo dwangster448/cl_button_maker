@@ -12,177 +12,180 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
   </head>
   <body>
-    <header>
-      <div class="red_border">University of Wisconsin - Madison</div>
+    <div class="content-wrapper">
+      <header>
+        <div class="red_border">University of Wisconsin - Madison</div>
 
-      <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-          <img
-            src="images/uwlibrarieslogo.png"
-            alt="uwlibrarieslogo"
-            id="uwlibrarieslogo"
-          />
-          <!-- navbar burger -->
-          <a
-            class="navbar-burger"
-            role="button"
-            aria-label="menu"
-            aria-expanded="false"
-          >
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-          </a>
-          <!-- right side buttons -->
-          <div class="navbar-menu">
-            <div class="navbar-item">
-              <a class="button" href="index.html">Home</a> &nbsp;
-              <a class="button" href="booknow.html">Book Now</a> &nbsp;
-              <a class="button" id="admin-login-button">Admin Login</a>
-            </div>
-          </div>
-        </div>
-      </nav>
-      <div class="greybox">
-        <p class="shiftleft">College Libary at Helen C. White Hall</p>
-      </div>
-    </header>
-
-    <div class="main-container">
-      <!-- Calendar Section -->
-      <div class="calendar-container">
-        <div class="calendar-header">
-          <button id="prevMonth" class="calendar-nav">◀</button>
-          <h2 id="monthYear"></h2>
-          <button id="nextMonth" class="calendar-nav">▶</button>
-        </div>
-        <div id="calendar"></div>
-      </div>
-
-      <!-- Reservation Box Section -->
-      <div class="column has-background-info-light is-one-quarter">
-        <p class="panel-heading">
-          Reservation Details
-          <br />
-          Please fill out the following reservation form
-        </p>
-        <form id="review">
-          <div class="field">
-            <label class="label">Name</label>
-            <div class="control">
-              <input class="input" type="text" placeholder="Name" required />
-            </div>
-          </div>
-          <div class="field">
-            <label class="label">Email</label>
-            <div class="control">
-              <input class="input" type="text" placeholder="Email" required />
-            </div>
-          </div>
-          <div class="field">
-            <label class="label">Phone Number</label>
-            <div class="control">
-              <input
-                class="input"
-                type="text"
-                placeholder="Phone Number"
-                required
-              />
-            </div>
-          </div>
-          <div class="field">
-            <label class="label"
-              >Which Button Maker Would You Like to Reserve?</label
-            >
-            <div class="control">
-              <input
-                type="radio"
-                id="size-1"
-                name="button-size"
-                value="1"
-                required
-              />
-              <label for="size-1">1"</label>
-              <input
-                type="radio"
-                id="size-2.25"
-                name="button-size"
-                value="2.25"
-              />
-              <label for="size-2.25">2.25"</label>
-            </div>
-          </div>
-
-          <div class="field">
-            <label class="label"
-              >What day would you like to pick up the button maker?
-            </label>
-            <div class="control">
-              <input class="input" type="date" required />
-            </div>
-          </div>
-
-          <div class="field">
-            <label class="label"
-              >At what time do you want to pick up the button maker?</label
-            >
-            <div class="control">
-              <input class="input" type="time" required />
-            </div>
-          </div>
-
-          <div class="field">
-            <label class="label"
-              >On what date do you want to return the button maker?
-            </label>
-            <div class="control">
-              <input class="input" type="date" required />
-            </div>
-          </div>
-
-          <div class="field">
-            <label class="label"
-              >At what time do you want to return the button maker?
-            </label>
-            <div class="control">
-              <input class="input" type="time" required />
-            </div>
-          </div>
-
-          <div class="field">
-            <label for="return-agreement">
-              Click here to indicate that you agree to return the button maker
-              and circle cutter in working condition, and to accept financial
-              responsibility for the cost of any repairs and/or replacements
-              that are needed. College Library is not liable for any damages or
-              injuries sustained from using the button maker or circle cutter.
-            </label>
-            <input
-              type="checkbox"
-              id="return-agreement"
-              name="return-agreement"
-              required
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+          <div class="navbar-brand">
+            <img
+              src="images/uwlibrarieslogo.png"
+              alt="uwlibrarieslogo"
+              id="uwlibrarieslogo"
             />
+            <!-- navbar burger -->
+            <a
+              class="navbar-burger"
+              role="button"
+              aria-label="menu"
+              aria-expanded="false"
+            >
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+            </a>
+            <!-- right side buttons -->
+            <div class="navbar-menu">
+              <div class="navbar-item">
+                <a class="button" href="index.html">Home</a> &nbsp;
+                <a class="button" href="booknow.html">Book Now</a> &nbsp;
+                <a class="button" id="admin-login-button">Admin Login</a>
+              </div>
+            </div>
           </div>
-          <div class="field">
-            <label for="uw-info-agreement">
-              I understand my information is being used for University of
-              Wisconsin-Madison Libraries purposes.
+        </nav>
+        <div class="greybox">
+          <p class="shiftleft">College Libary at Helen C. White Hall</p>
+        </div>
+      </header>
+
+      <div class="main-container">
+        <!-- Calendar Section -->
+        <div class="calendar-container">
+          <div class="calendar-header">
+            <button id="prevMonth" class="calendar-nav">◀</button>
+            <h2 id="monthYear"></h2>
+            <button id="nextMonth" class="calendar-nav">▶</button>
+          </div>
+          <div id="calendar"></div>
+        </div>
+
+        <!-- Reservation Box Section -->
+        <div class="column has-background-info-light">
+          <p class="panel-heading">
+            Reservation Details
+            <br />
+            Please fill out the following reservation form
+          </p>
+          <form id="review">
+            <div class="field">
+              <label class="label">Name</label>
+              <div class="control">
+                <input class="input" type="text" placeholder="Name" required />
+              </div>
+            </div>
+            <div class="field">
+              <label class="label">Email</label>
+              <div class="control">
+                <input class="input" type="text" placeholder="Email" required />
+              </div>
+            </div>
+            <div class="field">
+              <label class="label">Phone Number</label>
+              <div class="control">
+                <input
+                  class="input"
+                  type="text"
+                  placeholder="Phone Number"
+                  required
+                />
+              </div>
+            </div>
+            <div class="field">
+              <label class="label"
+                >Which Button Maker Would You Like to Reserve?</label
+              >
+              <div class="control">
+                <input
+                  type="radio"
+                  id="size-1"
+                  name="button-size"
+                  value="1"
+                  required
+                />
+                <label for="size-1">1"</label>
+                <input
+                  type="radio"
+                  id="size-2.25"
+                  name="button-size"
+                  value="2.25"
+                />
+                <label for="size-2.25">2.25"</label>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label"
+                >What day would you like to pick up the button maker?
+              </label>
+              <div class="control">
+                <input class="input" type="date" required />
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label"
+                >At what time do you want to pick up the button maker?</label
+              >
+              <div class="control">
+                <input class="input" type="time" required />
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label"
+                >On what date do you want to return the button maker?
+              </label>
+              <div class="control">
+                <input class="input" type="date" required />
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label"
+                >At what time do you want to return the button maker?
+              </label>
+              <div class="control">
+                <input class="input" type="time" required />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="return-agreement">
+                Click here to indicate that you agree to return the button maker
+                and circle cutter in working condition, and to accept financial
+                responsibility for the cost of any repairs and/or replacements
+                that are needed. College Library is not liable for any damages
+                or injuries sustained from using the button maker or circle
+                cutter.
+              </label>
               <input
                 type="checkbox"
-                id="uw-info-agreement"
-                name="uw-info-agreement"
+                id="return-agreement"
+                name="return-agreement"
                 required
               />
-            </label>
-          </div>
-          <div class="field is-grouped">
-            <div class="control">
-              <button class="button is-white">Submit</button>
             </div>
-          </div>
-        </form>
+            <div class="field">
+              <label for="uw-info-agreement">
+                I understand my information is being used for University of
+                Wisconsin-Madison Libraries purposes.
+                <input
+                  type="checkbox"
+                  id="uw-info-agreement"
+                  name="uw-info-agreement"
+                  required
+                />
+              </label>
+            </div>
+            <div class="field is-grouped">
+              <div class="control">
+                <button class="button is-white">Submit</button>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
 
