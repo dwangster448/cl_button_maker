@@ -1,19 +1,22 @@
 console.log(firebase);
-// Calendar code
+
+// code for the calendar
+
 document.addEventListener("DOMContentLoaded", function () {
   const calendarContainer = document.getElementById("calendar");
   const monthYearDisplay = document.getElementById("monthYear");
   const prevButton = document.getElementById("prevMonth");
   const nextButton = document.getElementById("nextMonth");
-  const reserveButton = document.getElementById("reserveButton");
-
   const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  let currentDate = new Date();
-  let selectedDays = [];
 
+  let currentDate = new Date();
+
+  // Render the calendar for the current month
   function renderCalendar() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
+
+    // Display month and year
     monthYearDisplay.textContent = currentDate.toLocaleDateString("en-US", {
       month: "long",
       year: "numeric",
@@ -24,78 +27,47 @@ document.addEventListener("DOMContentLoaded", function () {
 
     calendarContainer.innerHTML = "";
 
-    // Create headers
+    // Create header row with day names
     const daysRow = document.createElement("div");
     daysRow.classList.add("calendar-row");
     daysOfWeek.forEach((day) => {
-      const dayHeader = createElement("div", "calendar-day day-header", day);
-      daysRow.appendChild(dayHeader);
+      const dayEl = document.createElement("div");
+      dayEl.textContent = day;
+      daysRow.appendChild(dayEl);
     });
     calendarContainer.appendChild(daysRow);
 
-    // Create calendar grid
-    const daysGrid = document.createElement("div");
-    daysGrid.classList.add("calendar-grid");
+    // Create grid for the calendar days
+    const grid = document.createElement("div");
+    grid.classList.add("calendar-grid");
 
+    // Add blank days before the first day of the month
     for (let i = 0; i < firstDay; i++) {
-      daysGrid.appendChild(createElement("div", "calendar-day empty", ""));
+      const blank = document.createElement("div");
+      grid.appendChild(blank);
     }
 
+    // Add actual days of the month
     for (let day = 1; day <= daysInMonth; day++) {
-      let dayElement = createElement("div", "calendar-day", day);
-      dayElement.addEventListener("click", () =>
-        handleDayClick(day, dayElement)
-      );
-      daysGrid.appendChild(dayElement);
+      const dayEl = document.createElement("div");
+      dayEl.classList.add("calendar-day");
+      dayEl.textContent = day;
+      grid.appendChild(dayEl);
     }
 
-    calendarContainer.appendChild(daysGrid);
+    calendarContainer.appendChild(grid);
   }
 
-  function createElement(tag, className, text) {
-    const element = document.createElement(tag);
-    element.className = className;
-    element.textContent = text;
-    return element;
-  }
-
-  function handleDayClick(day, element) {
-    if (selectedDays.length === 3) {
-      selectedDays = [];
-      clearSelection();
-    }
-
-    if (selectedDays.length === 0 || isConsecutive(day)) {
-      selectedDays.push(day);
-      element.classList.add("selected");
-    } else {
-      selectedDays = [day];
-      clearSelection();
-      element.classList.add("selected");
-    }
-  }
-
-  function isConsecutive(day) {
-    return (
-      selectedDays.length === 0 ||
-      day === selectedDays[selectedDays.length - 1] + 1
-    );
-  }
-
-  function clearSelection() {
-    document
-      .querySelectorAll(".selected")
-      .forEach((el) => el.classList.remove("selected"));
-  }
-
-  prevButton.addEventListener("click", () => changeMonth(-1));
-  nextButton.addEventListener("click", () => changeMonth(1));
-
-  function changeMonth(offset) {
-    currentDate.setMonth(currentDate.getMonth() + offset);
-    selectedDays = [];
+  // Change month when clicking buttons
+  prevButton.addEventListener("click", () => {
+    currentDate.setMonth(currentDate.getMonth() - 1);
     renderCalendar();
-  }
+  });
+
+  nextButton.addEventListener("click", () => {
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    renderCalendar();
+  });
 
   renderCalendar();
 });
@@ -217,7 +189,7 @@ function confirmation() {
 }
 
 // Admin Login Modal
-const adminButton = document.querySelector('#admin-login-button');
+const adminButton = document.querySelector("#admin-login-button");
 document.addEventListener("DOMContentLoaded", () => {
   function r_e(id) {
     return document.querySelector(`#${id}`);
