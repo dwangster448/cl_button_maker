@@ -1,76 +1,10 @@
+console.log(firebase);
+
+let currentUserState = null; //variable to track user auth
+
+
 // code for the calendar
 
-//console.log(firebase);
-
-let currentUserState = null;
-
-function r_e(id) {
-  return document.querySelector(`#${id}`);
-}
-
-// Removed the sign-up functionality since users are created manually in Firebase
-
-// Login functionality
-// r_e("login_form").addEventListener("submit", (e) => {
-//   // Prevent page from auto refreshing
-//   e.preventDefault();
-
-//   // Get the username and password from the login form
-//   let email = r_e("admin_email").value;
-//   let password = r_e("password").value;
-
-//   // Log in the admin/user
-//   auth
-//     .signInWithEmailAndPassword(email, password)
-//     .then(() => {
-//       // On successful login, the onAuthStateChanged callback will also log the user info.
-//       console.log(`User ${auth.currentUser.email} is now logged in`);
-//     })
-//     .catch((err) => {
-//       // Fix: Use innerHTML instead of innerContent
-//       r_e("login_error").innerHTML = `Invalid username or password`;
-//       // Show the error message
-//       r_e("login_error").classList.remove("is-hidden");
-//       console.error(err);
-//     });
-// });
-
-r_e("login_form").addEventListener("submit", (e) => {
-  // Prevent page auto-refresh
-  e.preventDefault();
-
-  // Get the username and password from the login form
-  let email = r_e("admin_email").value;
-  let password = r_e("password").value;
-
-  // Log in the admin/user
-  auth
-    .signInWithEmailAndPassword(email, password)
-    .then(() => {
-      console.log(`User ${auth.currentUser.email} is now logged in`);
-      // Hide the login modal once the user is logged in
-      r_e("admin_modal").classList.remove("is-active");
-    })
-    .catch((err) => {
-      r_e("login_error").innerHTML = `Invalid username or password`;
-      r_e("login_error").classList.remove("is-hidden");
-      console.error(err);
-    });
-});
-
-
-// Listen for authentication status changes
-auth.onAuthStateChanged((user) => {
-  if (user) {
-    currentUserState = user; // or use auth.currentUser to directly access auth
-    // Log successful authentication and show user details on console
-    console.log("onAuthStateChanged: User logged in:", user.email);
-  } else {
-    console.log("onAuthStateChanged: No user logged in");
-  }
-});
-
-// Calendar code
 document.addEventListener("DOMContentLoaded", function () {
   const calendarContainer = document.getElementById("calendar");
   const monthYearDisplay = document.getElementById("monthYear");
@@ -160,6 +94,15 @@ document.addEventListener("DOMContentLoaded", function () {
 // import { getFirestore, collection, addDoc } from "firebase/firestore";
 // import { getDatabase, ref, push, set } from "firebase/database";
 
+// const firebaseConfig = {
+//     apiKey: "YOUR_API_KEY",
+//     authDomain: "YOUR_AUTH_DOMAIN",
+//     projectId: "YOUR_PROJECT_ID",
+//     storageBucket: "YOUR_STORAGE_BUCKET",
+//     messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+//     appId: "YOUR_APP_ID",
+//     measurementId: "YOUR_MEASUREMENT_ID"
+// };
 
 // const auth = getAuth(app);
 // const db = getFirestore(app);
@@ -268,62 +211,24 @@ document.addEventListener("DOMContentLoaded", () => {
     return document.querySelector(`#${id}`);
   }
 
-document.addEventListener("DOMContentLoaded", () => {
-  // Get references to the buttons by their unique IDs
-  const adminLoginButton = r_e("admin-login-button");
-  const signOutButton = r_e("sign-out-button");
-
-  // Listen for auth state changes
-  auth.onAuthStateChanged((user) => {
-    if (user) {
-      // When the user is authenticated, show the sign out button and hide admin login.
-      signOutButton.style.display = "inline-block";
-      adminLoginButton.style.display = "none";
-    } else {
-      // When no user is authenticated, hide the sign out button and show admin login.
-      signOutButton.style.display = "none";
-      adminLoginButton.style.display = "inline-block";
-    }
-  });
-
-  // Attach sign out event to the sign out button
-  signOutButton.addEventListener("click", (e) => {
-    e.preventDefault();
-    auth.signOut()
-      .then(() => {
-        console.log("User signed out successfully.");
-        // Optionally, you can update UI elements or redirect the user after sign out.
-      })
-      .catch((error) => {
-        console.error("Error during sign out:", error);
-      });
-  });
-
-  // (Optional) Additional code handling other UI elements or interactions can go here.
-  // When the Admin Login button is clicked, show the login modal.
   r_e("admin-login-button").addEventListener("click", () => {
     r_e("admin_modal").classList.add("is-active");
   });
 
-  // When the modal background is clicked, hide the modal.
   r_e("admin_modalbg").addEventListener("click", () => {
     r_e("admin_modal").classList.remove("is-active");
   });
 });
 
-// document.addEventListener("DOMContentLoaded", () => {
-//   function r_e(id) {
-//     return document.querySelector(`#${id}`);
-//   }
+// admin login
 
-//   r_e("admin-login-button").addEventListener("click", () => {
-//     r_e("admin_modal").classList.add("is-active");
-//   });
+function r_e(id) {
+  return document.querySelector(`#${id}`);
+}
 
-//   r_e("admin_modalbg").addEventListener("click", () => {
-//     r_e("admin_modal").classList.remove("is-active");
-//   });
-// });
+r_e("login_form").addEventListener("submit", (e) => {
+  // prevent page from auto refresh
+  e.preventDefault();
 
   // get the username and password
   let email = r_e("email_").value;
@@ -352,3 +257,168 @@ document.addEventListener("DOMContentLoaded", () => {
       r_e("signinerror").classList.remove("is-hidden");
     });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  // Get references to the buttons by their unique IDs
+
+  const adminLoginButton = r_e("admin-login-button");
+  const signOutButton = r_e("sign-out-button");
+
+  // Listen for auth state changes
+
+  auth.onAuthStateChanged((user) => {
+
+    if (user) {
+      currentUserState = user;
+
+      // When the user is authenticated, show the sign out button and hide admin login.
+      signOutButton.style.display = "inline-block";
+      adminLoginButton.style.display = "none";
+
+      console.log("onAuthStateChanged: User logged in:", user.email);
+    } else {
+
+      // When no user is authenticated, hide the sign out button and show admin login.
+      signOutButton.style.display = "none";
+      adminLoginButton.style.display = "inline-block";
+
+      console.log("onAuthStateChanged: No user logged in");
+    }
+
+  });
+
+
+
+  // Attach sign out event to the sign out button
+
+  signOutButton.addEventListener("click", (e) => {
+
+    e.preventDefault();
+
+    auth.signOut()
+
+      .then(() => {
+
+        console.log("User signed out successfully.");
+
+        // Optionally, you can update UI elements or redirect the user after sign out.
+
+      })
+
+      .catch((error) => {
+
+        console.error("Error during sign out:", error);
+
+      });
+
+  });
+
+  // (Optional) Additional code handling other UI elements or interactions can go here.
+  // When the Admin Login button is clicked, show the login modal.
+
+});
+
+/////////
+
+// Removed the sign-up functionality since users are created manually in Firebase
+
+
+
+// Login functionality
+
+// r_e("login_form").addEventListener("submit", (e) => {
+
+//   // Prevent page from auto refreshing
+
+//   e.preventDefault();
+
+
+
+//   // Get the username and password from the login form
+
+//   let email = r_e("admin_email").value;
+
+//   let password = r_e("password").value;
+
+
+
+//   // Log in the admin/user
+
+//   auth
+
+//     .signInWithEmailAndPassword(email, password)
+
+//     .then(() => {
+
+//       // On successful login, the onAuthStateChanged callback will also log the user info.
+
+//       console.log(`User ${auth.currentUser.email} is now logged in`);
+
+//     })
+
+//     .catch((err) => {
+
+//       // Fix: Use innerHTML instead of innerContent
+
+//       r_e("login_error").innerHTML = `Invalid username or password`;
+
+//       // Show the error message
+
+//       r_e("login_error").classList.remove("is-hidden");
+
+//       console.error(err);
+
+//     });
+
+// });
+
+
+
+r_e("login_form").addEventListener("submit", (e) => {
+
+  // Prevent page auto-refresh
+
+  e.preventDefault();
+
+
+
+  // Get the username and password from the login form
+
+  let email = r_e("admin_email").value;
+
+  let password = r_e("password").value;
+
+
+
+  // Log in the admin/user
+
+  auth
+
+    .signInWithEmailAndPassword(email, password)
+
+    .then(() => {
+
+      console.log(`User ${auth.currentUser.email} is now logged in`);
+
+      // Hide the login modal once the user is logged in
+
+      r_e("admin_modal").classList.remove("is-active");
+
+    })
+
+    .catch((err) => {
+
+      r_e("login_error").innerHTML = `Invalid username or password`;
+
+      r_e("login_error").classList.remove("is-hidden");
+
+      console.error(err);
+
+    });
+
+});
+
+// Listen for authentication status changes
+
+
