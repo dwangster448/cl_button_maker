@@ -448,3 +448,9 @@ ul {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+#button_title
+{
+  margin-left: 2.5rem;
+  font-size: 25px;
+}
