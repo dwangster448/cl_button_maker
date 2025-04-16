@@ -10,13 +10,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   let currentDate = new Date();
-
-  // Render the calendar for the current month
   function renderCalendar() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
 
-    // Display month and year
     monthYearDisplay.textContent = currentDate.toLocaleDateString("en-US", {
       month: "long",
       year: "numeric",
@@ -27,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     calendarContainer.innerHTML = "";
 
-    // Create header row with day names
+    // Header row with weekdays
     const daysRow = document.createElement("div");
     daysRow.classList.add("calendar-row");
     daysOfWeek.forEach((day) => {
@@ -37,28 +34,44 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     calendarContainer.appendChild(daysRow);
 
-    // Create grid for the calendar days
+    // Day grid
     const grid = document.createElement("div");
     grid.classList.add("calendar-grid");
 
-    // Add blank days before the first day of the month
+    // Blank cells
     for (let i = 0; i < firstDay; i++) {
       const blank = document.createElement("div");
+      blank.classList.add("calendar-day", "empty");
       grid.appendChild(blank);
     }
 
-    // Add actual days of the month
+    // Calendar days
     for (let day = 1; day <= daysInMonth; day++) {
       const dayEl = document.createElement("div");
       dayEl.classList.add("calendar-day");
-      dayEl.textContent = day;
+
+      // Manual input of a reservation bar
+      // Make it logistical
+      // Make it apply to months and days
+      if (day === 15) {
+        dayEl.classList.add("bar-start");
+        dayEl.setAttribute(
+          "data-label",
+          "11am pickup - 2¼ inch (Josiah) - return @5pm"
+        );
+      } else if (day === 16) {
+        dayEl.classList.add("bar-middle");
+      } else if (day === 17) {
+        dayEl.classList.add("bar-end");
+      }
+
+      dayEl.innerHTML = `<div class="day-number">${day}</div>`;
       grid.appendChild(dayEl);
     }
 
     calendarContainer.appendChild(grid);
   }
 
-  // Change month when clicking buttons
   prevButton.addEventListener("click", () => {
     currentDate.setMonth(currentDate.getMonth() - 1);
     renderCalendar();
