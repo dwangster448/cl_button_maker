@@ -1,7 +1,73 @@
 console.log(firebase);
 
-let currentUserState = null; //variable to track user auth
+function waitForAuthInit() {
+  return new Promise((resolve) => {
+    const unsubscribe = firebase.auth().onAuthStateChanged(user => {
+      unsubscribe(); // Only run once
+      resolve(user);
+    });
+  });
+}
 
+function updateUIBasedOnUser(user) {
+  const adminLoginBtn   = document.getElementById('admin-login-button');
+  const signOutBtn      = document.getElementById('sign-out-button');
+  const formContainer   = document.getElementById('reservation-form-container');
+  const queueContainer  = document.getElementById('reservation-queue-container');
+  const bookNowBtn      = document.getElementById('booknow-button');
+
+  if (user) {
+    // Authenticated state
+    console.log("✅ User logged in:", user.email);
+    if (adminLoginBtn)   adminLoginBtn.style.display = 'none';
+    if (signOutBtn)      signOutBtn.style.display = 'inline-block';
+    if (formContainer)   formContainer.classList.add('is-hidden');
+    if (queueContainer)  queueContainer.classList.remove('is-hidden');
+    if (bookNowBtn)      bookNowBtn.setAttribute('href', 'booknow.html');
+  } else {
+    // Not authenticated
+    console.log("🚫 No user logged in");
+    if (adminLoginBtn)   adminLoginBtn.style.display = 'inline-block';
+    if (signOutBtn)      signOutBtn.style.display = 'none';
+    if (formContainer)   formContainer.classList.remove('is-hidden');
+    if (queueContainer)  queueContainer.classList.add('is-hidden');
+    if (bookNowBtn)      bookNowBtn.setAttribute('href', 'booknow.html');
+  }
+}
+
+
+let currentUserState = null; //variable to track user auth
+const bookNowBtn = document.getElementById('booknow-button');
+const formContainer = document.getElementById('reservation-form-container');
+const queueContainer = document.getElementById('reservation-queue-container');
+
+// auth.onAuthStateChanged(user => {
+//   const adminBtn = document.getElementById('admin-login-button');
+//   const signOutBtn = document.getElementById('sign-out-button');
+//   const formDiv = document.getElementById('reservation-form-container');
+//   const queueDiv = document.getElementById('reservation-queue-container');
+//   const bookNowBtn = document.getElementById('booknow-button');
+
+//   if (user) {
+//     console.log("logged in")
+//     // Admin is signed in
+//     if (adminBtn) adminBtn.style.display = 'none';
+//     if (signOutBtn) signOutBtn.style.display = 'inline-block';
+//     if (formDiv) formDiv.classList.add('is-hidden');
+//     if (queueDiv) queueDiv.classList.remove('is-hidden');
+//     if (bookNowBtn) bookNowBtn.href = 'admin.html';
+//     // load your reservations
+//     if (typeof loadReservations === 'function') loadReservations();
+//   } else {
+//     console.log("logged out")
+//     // No admin signed in
+//     if (adminBtn) adminBtn.style.display = 'inline-block';
+//     if (signOutBtn) signOutBtn.style.display = 'none';
+//     if (formDiv) formDiv.classList.remove('is-hidden');
+//     if (queueDiv) queueDiv.classList.add('is-hidden');
+//     if (bookNowBtn) bookNowBtn.href = 'booknow.html';
+//   }
+// });
 
 // code for the calendar
 
@@ -258,121 +324,93 @@ r_e("login_form").addEventListener("submit", (e) => {
     });
 });
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
   // Get references to the buttons by their unique IDs
+  const adminLoginBtn = document.getElementById('admin-login-button');
+  const adminModal = document.getElementById('admin_modal');
+  const adminModalBg = document.getElementById('admin_modalbg');
+  const loginForm = document.getElementById('login_form');
+  const loginError = document.getElementById('login_error');
+  const signOutBtn = document.getElementById('sign-out-button');
+  const formContainer = document.getElementById('reservation-form-container');
+  const queueContainer = document.getElementById('reservation-queue-container');
+  const bookNowBtn = document.getElementById('booknow-button');
 
-  const adminLoginButton = r_e("admin-login-button");
-  const signOutButton = r_e("sign-out-button");
+  const user = await waitForAuthInit();     // waits for initial auth state
+  updateUIBasedOnUser(user);                // sets initial UI
 
-  // Listen for auth state changes
+  auth.onAuthStateChanged(updateUIBasedOnUser);
 
-  auth.onAuthStateChanged((user) => {
+  if (adminLoginBtn && adminModal) {
+    adminLoginBtn.addEventListener('click', e => {
+      e.preventDefault();
+      adminModal.classList.add('is-active');
+    });
+  }
+  if (adminModalBg) {
+    adminModalBg.addEventListener('click', () => {
+      adminModal.classList.remove('is-active');
+    });
+  }
 
-    if (user) {
-      currentUserState = user;
+  // 2) Login form submit
+  if (loginForm) {
+    loginForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const email = document.getElementById('admin_email').value;
+      const password = document.getElementById('password').value;
+      auth.signInWithEmailAndPassword(email, password)
+        .then(() => {
+          loginError.classList.add('is-hidden');
+          loginForm.reset();
+          adminModal.classList.remove('is-active');
+        })
+        .catch(err => {
+          loginError.textContent = err.message;
+          loginError.classList.remove('is-hidden');
+        });
+    });
+  }
 
-      // When the user is authenticated, show the sign out button and hide admin login.
-      signOutButton.style.display = "inline-block";
-      adminLoginButton.style.display = "none";
-
-      console.log("onAuthStateChanged: User logged in:", user.email);
-    } else {
-
-      // When no user is authenticated, hide the sign out button and show admin login.
-      signOutButton.style.display = "none";
-      adminLoginButton.style.display = "inline-block";
-
-      console.log("onAuthStateChanged: No user logged in");
-    }
-
-  });
+  // 3) Sign out
+  if (signOutBtn) {
+    signOutBtn.addEventListener('click', e => {
+      e.preventDefault();
+      auth.signOut();
+    });
+  }
 
 
 
   // Attach sign out event to the sign out button
 
-  signOutButton.addEventListener("click", (e) => {
+  // signOutButton.addEventListener("click", (e) => {
 
-    e.preventDefault();
+  //   e.preventDefault();
 
-    auth.signOut()
+  //   auth.signOut()
 
-      .then(() => {
+  //     .then(() => {
 
-        console.log("User signed out successfully.");
+  //       console.log("User signed out successfully.");
 
-        // Optionally, you can update UI elements or redirect the user after sign out.
+  //       // Optionally, you can update UI elements or redirect the user after sign out.
 
-      })
+  //     })
 
-      .catch((error) => {
+  //     .catch((error) => {
 
-        console.error("Error during sign out:", error);
+  //       console.error("Error during sign out:", error);
 
-      });
+  //     });
 
-  });
+  // });
 
   // (Optional) Additional code handling other UI elements or interactions can go here.
   // When the Admin Login button is clicked, show the login modal.
 
 });
-
-/////////
-
-// Removed the sign-up functionality since users are created manually in Firebase
-
-
-
-// Login functionality
-
-// r_e("login_form").addEventListener("submit", (e) => {
-
-//   // Prevent page from auto refreshing
-
-//   e.preventDefault();
-
-
-
-//   // Get the username and password from the login form
-
-//   let email = r_e("admin_email").value;
-
-//   let password = r_e("password").value;
-
-
-
-//   // Log in the admin/user
-
-//   auth
-
-//     .signInWithEmailAndPassword(email, password)
-
-//     .then(() => {
-
-//       // On successful login, the onAuthStateChanged callback will also log the user info.
-
-//       console.log(`User ${auth.currentUser.email} is now logged in`);
-
-//     })
-
-//     .catch((err) => {
-
-//       // Fix: Use innerHTML instead of innerContent
-
-//       r_e("login_error").innerHTML = `Invalid username or password`;
-
-//       // Show the error message
-
-//       r_e("login_error").classList.remove("is-hidden");
-
-//       console.error(err);
-
-//     });
-
-// });
-
 
 
 r_e("login_form").addEventListener("submit", (e) => {

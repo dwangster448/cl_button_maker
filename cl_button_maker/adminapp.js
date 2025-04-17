@@ -1,3 +1,5 @@
+let currentUserState = null;
+
 const signInButton = document.querySelector('#signin');
 const signInModalBg = document.querySelector('#sign-in-modal .modal-background');
 const signInModal = document.querySelector('.modal#sign-in-modal');
