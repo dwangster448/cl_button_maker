@@ -1,343 +1,437 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UW-Libraries Button Maker</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UW-Libraries Button Maker</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" type="image/x-icon" href="favicon.ico" />
-</head>
-
-<!-- Admin login modal -->
-<div class="modal" id="admin_modal">
-  <div class="modal-background" id="admin_modalbg"></div>
-  <div class="modal-content p-6 has-background-white">
-    <h1 class="is-size-3 title">Log In</h1>
-    <form id="login_form">
-      <!-- Admin Email -->
-      <div class="field">
-        <label class="label" for="admin_email">Admin Email</label>
-        <div class="control">
-          <input type="text" id="admin_email" name="admin_email" required />
+  <!-- Admin login modal -->
+  <div class="modal" id="admin_modal">
+    <div class="modal-background" id="admin_modalbg"></div>
+    <div class="modal-content p-6 has-background-white">
+      <h1 class="is-size-3 title">Log In</h1>
+      <form id="login_form">
+        <!-- Admin Email -->
+        <div class="field">
+          <label class="label" for="admin_email">Admin Email</label>
+          <div class="control">
+            <input type="text" id="admin_email" name="admin_email" required />
+          </div>
         </div>
-      </div>
 
-      <!-- Password -->
-      <div class="field">
-        <label class="label" for="password">Password</label>
-        <div class="control">
-          <input type="password" id="password" name="password" required />
+        <!-- Password -->
+        <div class="field">
+          <label class="label" for="password">Password</label>
+          <div class="control">
+            <input type="password" id="password" name="password" required />
+          </div>
         </div>
-      </div>
 
-      <!-- Error message -->
-      <p id="login_error" class="has-text-danger has-text-weight-bold mt-3 mb-3 is-hidden"></p>
+        <!-- Error message -->
+        <p
+          id="login_error"
+          class="has-text-danger has-text-weight-bold mt-3 mb-3 is-hidden"
+        ></p>
 
-      <!-- Submit -->
-      <div class="field">
-        <div class="control">
-          <button type="submit" class="m-3 button is-link" id="submit_login">
-            Submit
-          </button>
+        <!-- Submit -->
+        <div class="field">
+          <div class="control">
+            <button type="submit" class="m-3 button is-link" id="submit_login">
+              Submit
+            </button>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
-</div>
 
-<body>
-  <div class="content-wrapper">
-    <header>
-      <div class="red_border" style="padding: 10px">
-        University of Wisconsin - Madison
-      </div>
-
-      <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-          <img src="images/uwlibrarieslogo.png" alt="uwlibrarieslogo" id="uwlibrarieslogo" style="padding: 10px" />
-          <a class="navbar-burger" role="button" aria-label="menu" aria-expanded="false">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-          </a>
+  <body>
+    <div class="content-wrapper">
+      <header>
+        <div class="red_border" style="padding: 10px">
+          University of Wisconsin - Madison
         </div>
 
-        <!-- right side buttons -->
-        <div class="navbar-menu">
-          <div class="navbar-end">
-            <div class="navbar-item">
-              <a class="button" href="index.html" style="margin-left: 15px">Home</a>
-              <a class="button" href="booknow.html" style="margin-left: 15px">Book Now</a>
-              <a class="button" id="admin-login-button" id="admin-login-button" style="margin-left: 15px">Admin Login</a>
-              <a class="button" id="sign-out-button" style="margin-left: 15px;">Sign out</a>
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+          <div class="navbar-brand">
+            <img
+              src="images/uwlibrarieslogo.png"
+              alt="uwlibrarieslogo"
+              id="uwlibrarieslogo"
+              style="padding: 10px"
+            />
+            <a
+              class="navbar-burger"
+              role="button"
+              aria-label="menu"
+              aria-expanded="false"
+            >
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+            </a>
+          </div>
+
+          <!-- right side buttons -->
+          <div class="navbar-menu">
+            <div class="navbar-end">
+              <div class="navbar-item">
+                <a class="button" href="index.html" style="margin-left: 15px"
+                  >Home</a
+                >
+                <a class="button" href="booknow.html" style="margin-left: 15px"
+                  >Book Now</a
+                >
+                <a
+                  class="button"
+                  id="admin-login-button"
+                  id="admin-login-button"
+                  style="margin-left: 15px"
+                  >Admin Login</a
+                >
+                <a class="button" id="sign-out-button" style="margin-left: 15px"
+                  >Sign out</a
+                >
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <div class="greybox">
+          <p class="shiftleft">College Library at Helen C. White Hall</p>
+        </div>
+      </header>
+
+      <div class="main-container">
+        <!-- Calendar Section -->
+        <div class="calendar-container">
+          <div class="calendar-header">
+            <button id="prevMonth" class="calendar-nav">◀</button>
+            <h2 id="monthYear"></h2>
+            <button id="nextMonth" class="calendar-nav">▶</button>
+          </div>
+          <div id="calendar"></div>
+        </div>
+
+        <!-- Reservation Box Section -->
+        <div
+          id="reservation-form-container"
+          class="column has-background-info-light"
+        >
+          <p class="panel-heading">
+            Reservation Details
+            <br />
+            Please fill out the following reservation form
+          </p>
+          <div id="reservation-form-container">
+            <form id="review">
+              <div class="field">
+                <label class="label" for="res_name">Name</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    type="text"
+                    placeholder="Name"
+                    id="res_name"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label" for="res_email">Email</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    type="text"
+                    placeholder="Email"
+                    id="res_email"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label" for="res_phone">Phone Number</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    type="text"
+                    placeholder="Phone Number"
+                    id="res_phone"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label"
+                  >Which Button Maker Would You Like to Reserve?</label
+                >
+                <div class="control">
+                  <input
+                    type="radio"
+                    id="size_1"
+                    name="button-size"
+                    value="1"
+                    required
+                  />
+                  <label for="size_1">1"</label>
+                  <input
+                    type="radio"
+                    id="size_2_25"
+                    name="button-size"
+                    value="2.25"
+                    required
+                  />
+                  <label for="size_2_25">2.25"</label>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label" for="pickup_date"
+                  >What day would you like to pick up the button maker?</label
+                >
+                <div class="control">
+                  <input class="input" type="date" id="pickup_date" required />
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label" for="pickup_time"
+                  >At what time do you want to pick up the button maker?</label
+                >
+                <div class="control">
+                  <input class="input" type="time" id="pickup_time" required />
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label" for="return_date"
+                  >On what date do you want to return the button maker?</label
+                >
+                <div class="control">
+                  <input class="input" type="date" id="return_date" required />
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label" for="return_time"
+                  >At what time do you want to return the button maker?</label
+                >
+                <div class="control">
+                  <input class="input" type="time" id="return_time" required />
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="return_agreement">
+                  Click here to indicate that you agree to return the button
+                  maker and circle cutter in working condition, and to accept
+                  financial responsibility for the cost of any repairs and/or
+                  replacements that are needed. College Library is not liable
+                  for any damages or injuries sustained from using the button
+                  maker or circle cutter.
+                </label>
+                <input
+                  type="checkbox"
+                  id="return_agreement"
+                  name="return_agreement"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label for="uw_info_agreement">
+                  I understand my information is being used for University of
+                  Wisconsin-Madison Libraries purposes.
+                </label>
+                <input
+                  type="checkbox"
+                  id="uw_info_agreement"
+                  name="uw_info_agreement"
+                  required
+                />
+              </div>
+
+              <div class="field is-grouped">
+                <div class="control">
+                  <button class="button is-white" type="submit">Submit</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Reservation Box Section -->
+        <div id="reservation-queue-container" class="is-hidden">
+          <div class="column has-background-info-light">
+            <div class="column">
+              <div id="reservation_queue">
+                <div class="box">
+                  <p class="title is-4">Reservation Request</p>
+                  <p><strong>Name:</strong> Alex Johnson</p>
+                  <p><strong>Email:</strong> alex.johnson@wisc.edu</p>
+                  <p><strong>Start:</strong> April 15, 2025</p>
+                  <p><strong>End:</strong> April 17, 2025</p>
+                  <p><strong>Button Type:</strong> 2.25 inch</p>
+
+                  <div class="buttons mt-3">
+                    <button class="button is-success">Accept</button>
+                    <button class="button is-danger">Deny</button>
+                  </div>
+                </div>
+                <div class="box">
+                  <p class="title is-4">Reservation Request</p>
+                  <p><strong>Name:</strong> Alex Johnson</p>
+                  <p><strong>Email:</strong> alex.johnson@wisc.edu</p>
+                  <p><strong>Start:</strong> April 15, 2025</p>
+                  <p><strong>End:</strong> April 17, 2025</p>
+                  <p><strong>Button Type:</strong> 2.25 inch</p>
+
+                  <div class="buttons mt-3">
+                    <button class="button is-success">Accept</button>
+                    <button class="button is-danger">Deny</button>
+                  </div>
+                </div>
+                <div class="box">
+                  <p class="title is-4">Reservation Request</p>
+                  <p><strong>Name:</strong> Alex Johnson</p>
+                  <p><strong>Email:</strong> alex.johnson@wisc.edu</p>
+                  <p><strong>Start:</strong> April 15, 2025</p>
+                  <p><strong>End:</strong> April 17, 2025</p>
+                  <p><strong>Button Type:</strong> 2.25 inch</p>
+
+                  <div class="buttons mt-3">
+                    <button class="button is-success">Accept</button>
+                    <button class="button is-danger">Deny</button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </nav>
-
-      <div class="greybox">
-        <p class="shiftleft">College Library at Helen C. White Hall</p>
       </div>
-    </header>
+    </div>
 
-    <div class="main-container">
-      <!-- Calendar Section -->
-      <div class="calendar-container">
-        <div class="calendar-header">
-          <button id="prevMonth" class="calendar-nav">◀</button>
-          <h2 id="monthYear"></h2>
-          <button id="nextMonth" class="calendar-nav">▶</button>
-        </div>
-        <div id="calendar"></div>
+    <footer class="footer foot">
+      <!-- Left Footer -->
+      <div class="footer-left">
+        <a href="https://www.wisc.edu/" target="_blank">
+          <img
+            src="images/uwfooterlogo2.png"
+            alt="University Logo"
+            class="footer-logo"
+          />
+        </a>
       </div>
 
-      <!-- Reservation Box Section -->
-      <div id="reservation-form-container" class="column has-background-info-light">
-        <p class="panel-heading">
-          Reservation Details
-          <br />
-          Please fill out the following reservation form
+      <!-- Middle Left Footer-->
+      <div class="footer-middle-left">
+        <h3>Libraries</h3>
+        <ul>
+          <li>
+            <a href="https://www.library.wisc.edu/accessibility/"
+              >Accessibility</a
+            >
+          </li>
+          <li>
+            <a href="https://www.library.wisc.edu/copyright-statement/"
+              >Copyright Statement</a
+            >
+          </li>
+          <li><a href="https://www.library.wisc.edu/policies/">Policies</a></li>
+        </ul>
+        <p class="feedback">
+          Feedback, questions, or accessibility issues?
+          <a href="mailto:libraries@wisc.edu">libraries@wisc.edu</a>
         </p>
-        <div id="reservation-form-container">
-          <form id="review">
-            <div class="field">
-              <label class="label">Name</label>
-              <div class="control">
-                <input class="input" type="text" placeholder="Name" required />
-              </div>
-            </div>
-            <div class="field">
-              <label class="label">Email</label>
-              <div class="control">
-                <input class="input" type="text" placeholder="Email" required />
-              </div>
-            </div>
-            <div class="field">
-              <label class="label">Phone Number</label>
-              <div class="control">
-                <input class="input" type="text" placeholder="Phone Number" required />
-              </div>
-            </div>
-            <div class="field">
-              <label class="label">Which Button Maker Would You Like to Reserve?</label>
-              <div class="control">
-                <input type="radio" id="size-1" name="button-size" value="1" required />
-                <label for="size-1">1"</label>
-                <input type="radio" id="size-2.25" name="button-size" value="2.25" />
-                <label for="size-2.25">2.25"</label>
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="label">What day would you like to pick up the button maker?
-              </label>
-              <div class="control">
-                <input class="input" type="date" required />
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="label">At what time do you want to pick up the button maker?</label>
-              <div class="control">
-                <input class="input" type="time" required />
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="label">On what date do you want to return the button maker?
-              </label>
-              <div class="control">
-                <input class="input" type="date" required />
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="label">At what time do you want to return the button maker?
-              </label>
-              <div class="control">
-                <input class="input" type="time" required />
-              </div>
-            </div>
-
-            <div class="field">
-              <label for="return-agreement">
-                Click here to indicate that you agree to return the button maker
-                and circle cutter in working condition, and to accept financial
-                responsibility for the cost of any repairs and/or replacements
-                that are needed. College Library is not liable for any damages
-                or injuries sustained from using the button maker or circle
-                cutter.
-              </label>
-              <input type="checkbox" id="return-agreement" name="return-agreement" required />
-            </div>
-            <div class="field">
-              <label for="uw-info-agreement">
-                I understand my information is being used for University of
-                Wisconsin-Madison Libraries purposes.
-                <input type="checkbox" id="uw-info-agreement" name="uw-info-agreement" required />
-              </label>
-            </div>
-            <div class="field is-grouped">
-              <div class="control">
-                <button class="button is-white">Submit</button>
-              </div>
-            </div>
-          </form>
-        </div>
-
-
       </div>
 
-      <!-- Reservation Box Section -->
-      <div id="reservation-queue-container" class="is-hidden">
-        <div class="column has-background-info-light">
-          <div class="column">
-            <div id="reservation_queue">
-              <div class="box">
-                <p class="title is-4">Reservation Request</p>
-                <p><strong>Name:</strong> Alex Johnson</p>
-                <p><strong>Email:</strong> alex.johnson@wisc.edu</p>
-                <p><strong>Start:</strong> April 15, 2025</p>
-                <p><strong>End:</strong> April 17, 2025</p>
-                <p><strong>Button Type:</strong> 2.25 inch</p>
-
-                <div class="buttons mt-3">
-                  <button class="button is-success">Accept</button>
-                  <button class="button is-danger">Deny</button>
-                </div>
-              </div>
-              <div class="box">
-                <p class="title is-4">Reservation Request</p>
-                <p><strong>Name:</strong> Alex Johnson</p>
-                <p><strong>Email:</strong> alex.johnson@wisc.edu</p>
-                <p><strong>Start:</strong> April 15, 2025</p>
-                <p><strong>End:</strong> April 17, 2025</p>
-                <p><strong>Button Type:</strong> 2.25 inch</p>
-
-                <div class="buttons mt-3">
-                  <button class="button is-success">Accept</button>
-                  <button class="button is-danger">Deny</button>
-                </div>
-              </div>
-              <div class="box">
-                <p class="title is-4">Reservation Request</p>
-                <p><strong>Name:</strong> Alex Johnson</p>
-                <p><strong>Email:</strong> alex.johnson@wisc.edu</p>
-                <p><strong>Start:</strong> April 15, 2025</p>
-                <p><strong>End:</strong> April 17, 2025</p>
-                <p><strong>Button Type:</strong> 2.25 inch</p>
-
-                <div class="buttons mt-3">
-                  <button class="button is-success">Accept</button>
-                  <button class="button is-danger">Deny</button>
-                </div>
-              </div>
-            </div>
+      <!-- Middle Right Footer -->
+      <div class="footer-middle-right">
+        <div class="contact-social">
+          <a
+            href="https://www.library.wisc.edu/help/contact/"
+            class="contact-link"
+          >
+            <img src="images/contactus.png" alt="Email" class="icon" /> Contact
+            Us
+          </a>
+          <div class="social-icons">
+            <a href="https://www.facebook.com/UWMadLibraries"
+              ><img src="images/facebook.png" alt="Facebook" class="icon"
+            /></a>
+            <a href="https://x.com/UWMadLibraries"
+              ><img src="images/x.png" alt="X" class="icon"
+            /></a>
+            <a
+              href="https://www.library.wisc.edu/about/library-social-media-accounts/"
+              ><img src="images/threedots.png" alt="More" class="icon"
+            /></a>
           </div>
         </div>
       </div>
-
-
-    </div>
-  </div>
-
-  <footer class="footer foot">
-    <!-- Left Footer -->
-    <div class="footer-left">
-      <a href="https://www.wisc.edu/" target="_blank">
-        <img src="images/uwfooterlogo2.png" alt="University Logo" class="footer-logo" />
-      </a>
-    </div>
-
-    <!-- Middle Left Footer-->
-    <div class="footer-middle-left">
-      <h3>Libraries</h3>
-      <ul>
-        <li>
-          <a href="https://www.library.wisc.edu/accessibility/">Accessibility</a>
-        </li>
-        <li>
-          <a href="https://www.library.wisc.edu/copyright-statement/">Copyright Statement</a>
-        </li>
-        <li><a href="https://www.library.wisc.edu/policies/">Policies</a></li>
-      </ul>
-      <p class="feedback">
-        Feedback, questions, or accessibility issues?
-        <a href="mailto:libraries@wisc.edu">libraries@wisc.edu</a>
+      <!-- Right Footer -->
+      <div class="footer-right">
+        <h3>Support Libraries</h3>
+        <a href="https://www.library.wisc.edu/giving/" target="_blank">
+          <img src="images/giveback.png" alt="Donate" class="support-icon" />
+        </a>
+      </div>
+    </footer>
+    <div class="secondary-footer">
+      <p>
+        <a href="https://www.wisc.edu/privacy-notice">Privacy Notice</a> |
+        <a href="©2025 Board of Regents of the University of Wisconsin System"
+          >©2025 Board of Regents of the University of Wisconsin System</a
+        >
       </p>
     </div>
 
-    <!-- Middle Right Footer -->
-    <div class="footer-middle-right">
-      <div class="contact-social">
-        <a href="https://www.library.wisc.edu/help/contact/" class="contact-link">
-          <img src="images/contactus.png" alt="Email" class="icon" /> Contact
-          Us
-        </a>
-        <div class="social-icons">
-          <a href="https://www.facebook.com/UWMadLibraries"><img src="images/facebook.png" alt="Facebook"
-              class="icon" /></a>
-          <a href="https://x.com/UWMadLibraries"><img src="images/x.png" alt="X" class="icon" /></a>
-          <a href="https://www.library.wisc.edu/about/library-social-media-accounts/"><img src="images/threedots.png"
-              alt="More" class="icon" /></a>
-        </div>
-      </div>
-    </div>
-    <!-- Right Footer -->
-    <div class="footer-right">
-      <h3>Support Libraries</h3>
-      <a href="https://www.library.wisc.edu/giving/" target="_blank">
-        <img src="images/giveback.png" alt="Donate" class="support-icon" />
-      </a>
-    </div>
-  </footer>
-  <div class="secondary-footer">
-    <p>
-      <a href="https://www.wisc.edu/privacy-notice">Privacy Notice</a> |
-      <a href="©2025 Board of Regents of the University of Wisconsin System">©2025 Board of Regents of the University of
-        Wisconsin System</a>
-    </p>
-  </div>
+    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
 
-  <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
 
-  <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
-  <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+    <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-storage.js"></script>
 
-  <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
-  <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-analytics.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-storage.js"></script>
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-firestore.js"></script>
 
-  <!-- Add Firebase products that you want to use -->
-  <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-firestore.js"></script>
+    <script>
+      // TODO
+      // Copy **only** your firebaseConfig from Google Firebae and add it below
 
-  <script>
-    // TODO
-    // Copy **only** your firebaseConfig from Google Firebae and add it below
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyBPRVwELevQvOA8oBb_uMoFpQqMAidPLLA",
+        authDomain: "button-maker-510fd.firebaseapp.com",
+        projectId: "button-maker-510fd",
+        storageBucket: "button-maker-510fd.firebasestorage.app",
+        messagingSenderId: "14696430845",
+        appId: "1:14696430845:web:2fa15780e1a17a2baf5294",
+      };
 
-    // Your web app's Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyBPRVwELevQvOA8oBb_uMoFpQqMAidPLLA",
-      authDomain: "button-maker-510fd.firebaseapp.com",
-      projectId: "button-maker-510fd",
-      storageBucket: "button-maker-510fd.firebasestorage.app",
-      messagingSenderId: "14696430845",
-      appId: "1:14696430845:web:2fa15780e1a17a2baf5294",
-    };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      // define authentication variable
+      let auth = firebase.auth();
+      let db = firebase.firestore();
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    // define authentication variable
-    let auth = firebase.auth();
-    let db = firebase.firestore();
-
-    // define a storage reference
-    let ref = firebase.storage().ref();
-  </script>
-  <script src="app.js"></script>
-</body>
-
+      // define a storage reference
+      let ref = firebase.storage().ref();
+    </script>
+    <script src="app.js"></script>
+  </body>
 </html>
