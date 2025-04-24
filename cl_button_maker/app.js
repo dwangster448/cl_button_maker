@@ -150,57 +150,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  async function loadReservationQueue() {
-    // grab your data
-    const reservations = await fetchQueueReservations();
-  
-    // un-hide the panel
-    const queueWrapper = document.getElementById("reservation-queue-container");
-    queueWrapper.classList.remove("is-hidden");
-  
-    // clear out any existing boxes
-    const queue = document.getElementById("reservation_queue");
-    queue.innerHTML = "";
-  
-    // for each reservation, create your Bulma box
-    reservations.forEach(res => {
-      const box = document.createElement("div");
-      box.className = "box";
-      box.innerHTML = `
-        <p class="title is-4">Reservation Request</p>
-        <p><strong>Name:</strong> ${res.firstName}</p>
-        <p><strong>Email:</strong> ${res.email || "—"}</p>
-        <p><strong>Start:</strong> ${res.startDate.toLocaleDateString("en-US", {
-          month: "long", day: "numeric", year: "numeric"
-        })}</p>
-        <p><strong>End:</strong> ${res.endDate.toLocaleDateString("en-US", {
-          month: "long", day: "numeric", year: "numeric"
-        })}</p>
-        <p><strong>Button Type:</strong> ${res.buttonType}</p>
-        <div class="buttons mt-3">
-          <button class="button is-success" data-id="${res.id}" data-action="accept">
-            Accept
-          </button>
-          <button class="button is-danger"  data-id="${res.id}" data-action="deny">
-            Deny
-          </button>
-        </div>
-      `;
-      queue.appendChild(box);
-    });
-  
-    // (Optional) wire up Accept/Deny
-    queue.addEventListener("click", async e => {
-      const btn = e.target.closest("button[data-id]");
-      if (!btn) return;
-      const { id, action } = btn.dataset;
-      await db.collection("Reservation").doc(id)
-        .update({ status: action === "accept" ? "approved" : "denied" });
-      // re-load so it disappears once handled
-      loadReservationQueue();
-    });
-  }
-
   async function renderCalendar() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
@@ -301,6 +250,73 @@ document.addEventListener("DOMContentLoaded", function () {
 
   renderCalendar();
 });
+
+
+async function fetchReservations() {
+  try {
+    const snap = await db.collection("Reservation").get();
+    return snap.docs.map(doc => {
+      const d = doc.data();
+      return {
+        id:           doc.id,
+        name:         d.name,
+        email:        d.email,
+        phoneNumber:  d.phoneNumber,
+        buttonSize:   d.buttonSize,
+        pickupDate:   d.pickupDate,   // "YYYY-MM-DD"
+        pickupTime:   d.pickupTime,   // "HH:mm"
+        returnDate:   d.returnDate,
+        returnTime:   d.returnTime
+      };
+    });
+  } catch (e) {
+    console.error("Error loading reservations:", e);
+    return [];
+  }
+}
+
+// 2️⃣ Build one .box per reservation, append into #reservation_queue
+async function loadReservationQueue() {
+  const reservations = await fetchReservations();
+  const queueWrapper = document.getElementById("reservation-queue-container");
+  const queue = document.getElementById("reservation_queue");
+
+  // un-hide the whole panel
+  queueWrapper.classList.remove("is-hidden");
+  // clear any existing
+  queue.innerHTML = "";
+
+  reservations.forEach(res => {
+    const box = document.createElement("div");
+    box.classList.add("box");
+    box.innerHTML = `
+      <p class="title is-4">Reservation Request</p>
+      <p><strong>Name:</strong> ${res.name}</p>
+      <p><strong>Email:</strong> ${res.email}</p>
+      <p><strong>Phone:</strong> ${res.phoneNumber}</p>
+      <p><strong>Button Size:</strong> ${res.buttonSize}"</p>
+      <p><strong>Pickup:</strong> ${new Date(res.pickupDate).toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"})} @ ${res.pickupTime}</p>
+      <p><strong>Return:</strong> ${new Date(res.returnDate).toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"})} @ ${res.returnTime}</p>
+      <div class="buttons mt-3">
+        <button class="button is-success" data-id="${res.id}" data-action="accept">Accept</button>
+        <button class="button is-danger"  data-id="${res.id}" data-action="deny">Deny</button>
+      </div>
+    `;
+    queue.appendChild(box);
+  });
+
+  // 3️⃣ (Optional) handle Accept/Deny clicks
+  queue.addEventListener("click", async e => {
+    const btn = e.target.closest("button[data-id]");
+    if (!btn) return;
+    const { id, action } = btn.dataset;
+    await db.collection("Reservation").doc(id)
+      .update({ status: action === "accept" ? "approved" : "denied" });
+    // reload so it disappears
+    loadReservationQueue();
+  });
+}
+
 
 // Java Script Page
 // import { initializeApp } from "firebase/app";
