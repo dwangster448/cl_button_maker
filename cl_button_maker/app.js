@@ -78,9 +78,53 @@ document.addEventListener("DOMContentLoaded", function () {
   const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   let currentDate = new Date();
-  function renderCalendar() {
+
+  // Helper to convert string to Date
+  function parseDate(str) {
+    const [month, day, year] = str.split("/").map(Number);
+    return new Date(year, month - 1, day);
+  }
+
+  // Helper to format military time to standard time
+  function formatTime(timeStr) {
+    const [hourStr, minuteStr] = timeStr.split(":");
+    let hour = parseInt(hourStr, 10);
+    const minute = minuteStr.padStart(2, "0");
+    const ampm = hour >= 12 ? "PM" : "AM";
+    hour = hour % 12 || 12;
+    return `${hour}:${minute} ${ampm}`;
+  }
+
+  // Fetch documents from "Calendar"
+  async function fetchReservations() {
+    try {
+      const snapshot = await db.collection("Calendar").get(); // No where clause for now
+      const reservations = [];
+
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        reservations.push({
+          startDate: parseDate(data.start_date),
+          endDate: parseDate(data.end_date),
+          buttonType: data.button_type,
+          firstName: data.first_name,
+          pickupTime: data.pickup_time,
+          returnTime: data.return_time,
+        });
+      });
+
+      console.log("✅ Reservations loaded:", reservations);
+      return reservations;
+    } catch (err) {
+      console.error("🔥 Error fetching from Calendar collection:", err);
+      return [];
+    }
+  }
+
+  async function renderCalendar() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
+    const reservations = await fetchReservations();
 
     monthYearDisplay.textContent = currentDate.toLocaleDateString("en-US", {
       month: "long",
@@ -92,7 +136,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     calendarContainer.innerHTML = "";
 
-    // Header row with weekdays
     const daysRow = document.createElement("div");
     daysRow.classList.add("calendar-row");
     daysOfWeek.forEach((day) => {
@@ -102,38 +145,65 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     calendarContainer.appendChild(daysRow);
 
-    // Day grid
     const grid = document.createElement("div");
     grid.classList.add("calendar-grid");
 
-    // Blank cells
     for (let i = 0; i < firstDay; i++) {
       const blank = document.createElement("div");
       blank.classList.add("calendar-day", "empty");
       grid.appendChild(blank);
     }
 
-    // Calendar days
     for (let day = 1; day <= daysInMonth; day++) {
       const dayEl = document.createElement("div");
       dayEl.classList.add("calendar-day");
 
-      // Manual input of a reservation bar
-      // Make it logistical
-      // Make it apply to months and days
-      if (day === 15) {
-        dayEl.classList.add("bar-start");
-        dayEl.setAttribute(
-          "data-label",
-          "11am pickup - 2¼ inch (Josiah) - return @5pm"
-        );
-      } else if (day === 16) {
-        dayEl.classList.add("bar-middle");
-      } else if (day === 17) {
-        dayEl.classList.add("bar-end");
-      }
+      const thisDate = new Date(year, month, day);
+      const barContainer = document.createElement("div");
+      barContainer.classList.add("bar-container");
 
-      dayEl.innerHTML = `<div class="day-number">${day}</div>`;
+      // Always show the day number at the top
+      const dayNumber = document.createElement("div");
+      dayNumber.classList.add("day-number");
+      dayNumber.textContent = day;
+      dayEl.appendChild(dayNumber);
+
+      // Loop through each reservation
+      reservations.forEach((res) => {
+        const start = res.startDate;
+        const end = res.endDate;
+
+        if (thisDate >= start && thisDate <= end) {
+          const label = `${formatTime(res.pickupTime)} - ${res.buttonType} (${
+            res.firstName
+          }); return @ ${formatTime(res.returnTime)}`;
+
+          const bar = document.createElement("div");
+
+          // Assign position + type-based class
+          if (res.buttonType === "1 inch") {
+            bar.classList.add("bar-start", "bar-1inch");
+          } else if (res.buttonType === "2.25 inches") {
+            bar.classList.add("bar-start", "bar-2_25inch");
+          }
+
+          // Only apply the label on the start date
+          if (thisDate.toDateString() === start.toDateString()) {
+            bar.setAttribute("data-label", label);
+          } else if (thisDate.toDateString() === end.toDateString()) {
+            bar.classList.remove("bar-start");
+            bar.classList.add("bar-end");
+          } else {
+            bar.classList.remove("bar-start");
+            bar.classList.add("bar-middle");
+          }
+
+          barContainer.appendChild(bar);
+        }
+      });
+
+      // Append all bars for that day
+      dayEl.appendChild(barContainer);
       grid.appendChild(dayEl);
     }
 
@@ -304,8 +374,10 @@ r_e("login_form").addEventListener("submit", (e) => {
     .signInWithEmailAndPassword(email, password)
     .then(() => {
       // show admin dashboard
-      r_e("admin_dashboard").classList.remove("is-hidden");
-      r_e("reserve_form").classList.add("is-hidden");
+      r_e("reservation-queue-container").classList.remove("is-hidden");
+      r_e("admin-dashboard-title").classList.remove("is-hidden");
+      r_e("reservation-form-container").classList.add("is-hidden");
+      r_e("reservation-page-title").classList.add("is-hidden");
 
       // configure message bar
       console.log(`Admin ${auth.currentUser.email} is now logged in`);

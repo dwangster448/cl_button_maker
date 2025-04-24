@@ -407,14 +407,10 @@ ul {
 .bar-end::before {
   content: "";
   position: absolute;
-  top: 50%;
   left: -1px;
-  height: 25px;
-  background-color: #0059b9;
-  transform: translateY(-50%);
-  z-index: 2;
+  height: 18px;
   width: calc(100% + 2px);
-  border-radius: 0;
+  z-index: 2;
 }
 
 /* Rounded corners */
@@ -428,18 +424,16 @@ ul {
   border-bottom-right-radius: 5px;
 }
 
-/* Label across the entire bar — only on start day */
 .bar-start::after {
   content: attr(data-label);
   position: absolute;
   top: 50%;
-  left: -1px;
-  width: calc(300% + 2px);
+  left: 4px;
+  max-width: 300%;
   height: 16px;
   color: white;
   font-size: 0.65rem;
   font-weight: bold;
-  text-align: center;
   line-height: 16px;
   transform: translateY(-50%);
   z-index: 3;
@@ -449,8 +443,65 @@ ul {
   text-overflow: ellipsis;
 }
 
-#button_title
-{
+.bar-1inch::before {
+  top: 30%;
+  background-color: #0059b9; /* Blue for 1 inch */
+  transform: translateY(-50%);
+}
+
+.bar-2_25inch::before {
+  top: 55%;
+  background-color: #db3a00; /* Red-orange for 2.25 inches */
+  transform: translateY(-50%);
+}
+
+.bar-start.bar-1inch::before {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+.bar-end.bar-1inch::before {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.bar-start.bar-2_25inch::before {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+.bar-end.bar-2_25inch::before {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+/* Labels on the start date */
+.bar-start.bar-1inch::after,
+.bar-start.bar-2_25inch::after {
+  content: attr(data-label);
+  position: absolute;
+  left: 4px;
+  font-size: 0.65rem;
+  font-weight: bold;
+  color: white;
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  z-index: 3;
+  height: 16px;
+  max-width: 300%;
+}
+
+/* Position labels to match bar height */
+.bar-start.bar-1inch::after {
+  top: 30%;
+  transform: translateY(-50%);
+}
+.bar-start.bar-2_25inch::after {
+  top: 55%;
+  transform: translateY(-50%);
+}
+
+#button_title {
   margin-left: 2.5rem;
   font-size: 25px;
 }
