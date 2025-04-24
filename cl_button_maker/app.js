@@ -530,16 +530,29 @@ document.addEventListener("DOMContentLoaded", () => {
       pickupTime: r_e("pickup_time").value,
       returnDate: r_e("return_date").value,
       returnTime: r_e("return_time").value,
+      phoneNumber: r_e("res_phone").value,
     };
 
     db.collection("Reservation")
       .add(reservation)
       .then(() => {
         r_e("review").reset();
-        console.log("Reservation submitted.");
+        message_bar("Reservation submitted.");
       })
       .catch((err) => {
-        console.error("Error submitting reservation:", err);
+        message_bar("Error submitting reservation:", err);
       });
   });
 });
+
+// / message bar
+function message_bar(msg) {
+  r_e("message_bar").innerHTML = msg;
+
+  r_e("message_bar").classList.remove("is-hidden");
+
+  setTimeout(() => {
+    r_e("message_bar").classList.add("is-hidden");
+    r_e("message_bar").innerHTML = "";
+  }, 5000);
+}
