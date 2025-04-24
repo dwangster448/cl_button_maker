@@ -24,6 +24,8 @@ function updateUIBasedOnUser(user) {
     if (formContainer) formContainer.classList.add("is-hidden");
     if (queueContainer) queueContainer.classList.remove("is-hidden");
     if (bookNowBtn) bookNowBtn.setAttribute("href", "booknow.html");
+
+    loadReservationQueue();
   } else {
     // Not authenticated
     console.log("🚫 No user logged in");
@@ -121,6 +123,84 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  async function fetchQueueReservations() {
+    try {
+      const snapshot = await db
+        .collection("Reservation")         // ← your queue lives here
+        .where("status", "==", "pending") // optional filter; drop if you want all
+        .orderBy("start_date", "asc")     // sort by start date
+        .get();
+
+      return snapshot.docs.map(doc => {
+        const d = doc.data();
+        return {
+          id: doc.id,
+          firstName: d.first_name,
+          email: d.email,
+          startDate: parseDate(d.start_date),
+          endDate: parseDate(d.end_date),
+          buttonType: d.button_type,
+          pickupTime: d.pickup_time,
+          returnTime: d.return_time
+        };
+      });
+    } catch (err) {
+      console.error("🔥 Error fetching Reservation queue:", err);
+      return [];
+    }
+  }
+
+  async function loadReservationQueue() {
+    // grab your data
+    const reservations = await fetchQueueReservations();
+  
+    // un-hide the panel
+    const queueWrapper = document.getElementById("reservation-queue-container");
+    queueWrapper.classList.remove("is-hidden");
+  
+    // clear out any existing boxes
+    const queue = document.getElementById("reservation_queue");
+    queue.innerHTML = "";
+  
+    // for each reservation, create your Bulma box
+    reservations.forEach(res => {
+      const box = document.createElement("div");
+      box.className = "box";
+      box.innerHTML = `
+        <p class="title is-4">Reservation Request</p>
+        <p><strong>Name:</strong> ${res.firstName}</p>
+        <p><strong>Email:</strong> ${res.email || "—"}</p>
+        <p><strong>Start:</strong> ${res.startDate.toLocaleDateString("en-US", {
+          month: "long", day: "numeric", year: "numeric"
+        })}</p>
+        <p><strong>End:</strong> ${res.endDate.toLocaleDateString("en-US", {
+          month: "long", day: "numeric", year: "numeric"
+        })}</p>
+        <p><strong>Button Type:</strong> ${res.buttonType}</p>
+        <div class="buttons mt-3">
+          <button class="button is-success" data-id="${res.id}" data-action="accept">
+            Accept
+          </button>
+          <button class="button is-danger"  data-id="${res.id}" data-action="deny">
+            Deny
+          </button>
+        </div>
+      `;
+      queue.appendChild(box);
+    });
+  
+    // (Optional) wire up Accept/Deny
+    queue.addEventListener("click", async e => {
+      const btn = e.target.closest("button[data-id]");
+      if (!btn) return;
+      const { id, action } = btn.dataset;
+      await db.collection("Reservation").doc(id)
+        .update({ status: action === "accept" ? "approved" : "denied" });
+      // re-load so it disappears once handled
+      loadReservationQueue();
+    });
+  }
+
   async function renderCalendar() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
@@ -174,9 +254,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const end = res.endDate;
 
         if (thisDate >= start && thisDate <= end) {
-          const label = `${formatTime(res.pickupTime)} - ${res.buttonType} (${
-            res.firstName
-          }); return @ ${formatTime(res.returnTime)}`;
+          const label = `${formatTime(res.pickupTime)} - ${res.buttonType} (${res.firstName
+            }); return @ ${formatTime(res.returnTime)}`;
 
           const bar = document.createElement("div");
 
