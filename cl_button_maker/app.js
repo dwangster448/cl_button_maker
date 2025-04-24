@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Helper to convert string to Date
   function parseDate(str) {
-    const [month, day, year] = str.split("/").map(Number);
+    const [year, month, day] = str.split("-").map(Number);
     return new Date(year, month - 1, day);
   }
 
@@ -524,8 +524,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const reservation = {
       name: r_e("res_name").value,
       email: r_e("res_email").value,
-      buttonSize: document.querySelector('input[name="button-size"]:checked')
-        .value,
+      buttonSize:
+        document.querySelector('input[name="button-size"]:checked').value + '"',
       pickupDate: r_e("pickup_date").value,
       pickupTime: r_e("pickup_time").value,
       returnDate: r_e("return_date").value,
