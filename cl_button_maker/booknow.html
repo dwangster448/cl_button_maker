@@ -54,31 +54,39 @@
         University of Wisconsin - Madison
       </div>
 
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+          <div class="navbar-brand">
+            <img
+              src="images/uwlibrarieslogo.png"
+              alt="uwlibrarieslogo"
+              id="uwlibrarieslogo"
+              style="padding: 10px"
+            />
+            <a
+              class="navbar-burger"
+              role="button"
+              aria-label="menu"
+              aria-expanded="false"
+              data-target="navbarMenu"
+            >
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+            </a>
+          </div>
         
-      <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-          <img src="images/uwlibrarieslogo.png" alt="uwlibrarieslogo" id="uwlibrarieslogo" style="padding: 10px" />
-          <a class="navbar-burger" role="button" aria-label="menu" aria-expanded="false">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-          </a>
-        </div>
-
-        <!-- right side buttons -->
-        <div class="navbar-menu">
-          <div class="navbar-end">
-            <div class="navbar-item">
-              <a class="button" href="index.html" style="margin-left: 15px">Home</a>
-              <a class="button" href="booknow.html" style="margin-left: 15px">Book Now</a>
-              <a class="button" id="admin-login-button" id="admin-login-button" style="margin-left: 15px">Admin
-                Login</a>
-              <a class="button" id="sign-out-button" style="margin-left: 15px">Sign out</a>
+          <!-- right side buttons -->
+          <div id="navbarMenu" class="navbar-menu">
+            <div class="navbar-end is-flex is-justify-content-flex-end pr-4">
+              <div class="navbar-item">
+                <a class="button" href="index.html" style="margin-left: 15px">Home</a>
+                <a class="button" href="booknow.html" style="margin-left: 15px" id="booknow-button">Book Now</a>
+                <a class="button" id="admin-login-button" style="margin-left: 15px">Admin Login</a>
+                <a class="button" id="sign-out-button" style="margin-left: 15px">Sign out</a>
+              </div>
             </div>
           </div>
-        </div>
-      </nav>
-
+        </nav>
       <div class="greybox">
         <p class="shiftleft">College Library at Helen C. White Hall</p>
       </div>
@@ -110,8 +118,6 @@
     <h1 id="admin-dashboard-title" class="title has-text-centered m-5 is-hidden">
       Admin Dashboard
     </h1>
-
-    <div class="main-container">
       <!-- Reservation Box Section -->
       <div id="reservation-form-container" class="column has-background-info-light">
         <p class="panel-heading">

@@ -661,3 +661,17 @@ document.addEventListener('DOMContentLoaded', () => {
     menu.classList.toggle('is-active');
   });
 });
+
+firebase.auth().onAuthStateChanged((user) => {
+  const bookButton = document.getElementById("booknow-button");
+
+  if (bookButton) {
+    if (user) {
+      // User is signed in
+      bookButton.textContent = "Reservations";
+    } else {
+      // User is signed out
+      bookButton.textContent = "Book Now";
+    }
+  }
+});
