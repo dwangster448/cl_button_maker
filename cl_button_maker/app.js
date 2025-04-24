@@ -275,18 +275,38 @@ async function fetchReservations() {
   }
 }
 
+let currentPage = 1;
+const pageSize   = 4; 
+
 // 2️⃣ Build one .box per reservation, append into #reservation_queue
 async function loadReservationQueue() {
   const reservations = await fetchReservations();
+
+  // total pages
+  const totalPages = Math.ceil(reservations.length / pageSize);
+
+  // clamp currentPage
+  if (currentPage > totalPages) currentPage = totalPages;
+  if (currentPage < 1)          currentPage = 1;
+
+  // slice out only the items for this page
+  const sliceStart = (currentPage - 1) * pageSize;
+  const pageItems  = reservations.slice(sliceStart, sliceStart + pageSize);
+
+  // grab your containers
   const queueWrapper = document.getElementById("reservation-queue-container");
-  const queue = document.getElementById("reservation_queue");
+  const queue        = document.getElementById("reservation_queue");
 
   // un-hide the whole panel
   queueWrapper.classList.remove("is-hidden");
-  // clear any existing
-  queue.innerHTML = "";
 
-  reservations.forEach(res => {
+  // clear out old items **and** old pagination controls
+  queue.innerHTML = "";
+  const oldPager = document.getElementById("queue-pagination");
+  if (oldPager) oldPager.remove();
+
+  // build boxes for only this page
+  pageItems.forEach(res => {
     const box = document.createElement("div");
     box.classList.add("box");
     box.innerHTML = `
@@ -295,24 +315,61 @@ async function loadReservationQueue() {
       <p><strong>Email:</strong> ${res.email}</p>
       <p><strong>Phone:</strong> ${res.phoneNumber}</p>
       <p><strong>Button Size:</strong> ${res.buttonSize}"</p>
-      <p><strong>Pickup:</strong> ${new Date(res.pickupDate).toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"})} @ ${res.pickupTime}</p>
-      <p><strong>Return:</strong> ${new Date(res.returnDate).toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"})} @ ${res.returnTime}</p>
+      <p><strong>Pickup:</strong> ${new Date(res.pickupDate)
+         .toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"})}
+         @ ${res.pickupTime}</p>
+      <p><strong>Return:</strong> ${new Date(res.returnDate)
+         .toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"})}
+         @ ${res.returnTime}</p>
       <div class="buttons mt-3">
-        <button class="button is-success" data-id="${res.id}" data-action="accept">Accept</button>
-        <button class="button is-danger"  data-id="${res.id}" data-action="deny">Deny</button>
+        <button class="button is-success" data-id="${res.id}" data-action="accept">
+          Accept
+        </button>
+        <button class="button is-danger"  data-id="${res.id}" data-action="deny">
+          Deny
+        </button>
       </div>
     `;
     queue.appendChild(box);
   });
 
-  // 3️⃣ (Optional) handle Accept/Deny clicks
+  // create pagination controls
+  const pager = document.createElement("div");
+  pager.id = "queue-pagination";
+  pager.classList.add("buttons","are-small","mt-4","is-centered");
+
+  const prevBtn = document.createElement("button");
+  prevBtn.classList.add("button");
+  prevBtn.textContent = "← Prev";
+  prevBtn.disabled = currentPage === 1;
+  prevBtn.addEventListener("click", () => {
+    currentPage--;
+    loadReservationQueue();
+  });
+
+  const nextBtn = document.createElement("button");
+  nextBtn.classList.add("button");
+  nextBtn.textContent = "Next →";
+  nextBtn.disabled = currentPage === totalPages;
+  nextBtn.addEventListener("click", () => {
+    currentPage++;
+    loadReservationQueue();
+  });
+
+  const info = document.createElement("span");
+  info.textContent = `Page ${currentPage} of ${totalPages}`;
+
+  pager.append(prevBtn, info, nextBtn);
+  queue.parentNode.appendChild(pager);
+
+  // (Optional) keep your Accept/Deny handler
   queue.addEventListener("click", async e => {
     const btn = e.target.closest("button[data-id]");
     if (!btn) return;
     const { id, action } = btn.dataset;
     await db.collection("Reservation").doc(id)
       .update({ status: action === "accept" ? "approved" : "denied" });
-    // reload so it disappears
+    // reload current page
     loadReservationQueue();
   });
 }
