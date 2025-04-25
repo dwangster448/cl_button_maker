@@ -126,12 +126,12 @@ document.addEventListener("DOMContentLoaded", function () {
   async function fetchQueueReservations() {
     try {
       const snapshot = await db
-        .collection("Reservation")         // ← your queue lives here
+        .collection("Reservation") // ← your queue lives here
         .where("status", "==", "pending") // optional filter; drop if you want all
-        .orderBy("start_date", "asc")     // sort by start date
+        .orderBy("start_date", "asc") // sort by start date
         .get();
 
-      return snapshot.docs.map(doc => {
+      return snapshot.docs.map((doc) => {
         const d = doc.data();
         return {
           id: doc.id,
@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", function () {
           endDate: parseDate(d.end_date),
           buttonType: d.button_type,
           pickupTime: d.pickup_time,
-          returnTime: d.return_time
+          returnTime: d.return_time,
         };
       });
     } catch (err) {
@@ -203,15 +203,16 @@ document.addEventListener("DOMContentLoaded", function () {
         const end = res.endDate;
 
         if (thisDate >= start && thisDate <= end) {
-          const label = `${formatTime(res.pickupTime)} - ${res.buttonType} (${res.firstName
-            }); return @ ${formatTime(res.returnTime)}`;
+          const label = `${formatTime(res.pickupTime)} - ${res.buttonType} (${
+            res.firstName
+          }); return @ ${formatTime(res.returnTime)}`;
 
           const bar = document.createElement("div");
 
           // Assign position + type-based class
-          if (res.buttonType === "1 inch") {
+          if (res.buttonType === '1"') {
             bar.classList.add("bar-start", "bar-1inch");
-          } else if (res.buttonType === "2.25 inches") {
+          } else if (res.buttonType === '2.25"') {
             bar.classList.add("bar-start", "bar-2_25inch");
           }
 
@@ -251,22 +252,21 @@ document.addEventListener("DOMContentLoaded", function () {
   renderCalendar();
 });
 
-
 async function fetchReservations() {
   try {
     const snap = await db.collection("Reservation").get();
-    return snap.docs.map(doc => {
+    return snap.docs.map((doc) => {
       const d = doc.data();
       return {
-        id:           doc.id,
-        name:         d.name,
-        email:        d.email,
-        phoneNumber:  d.phoneNumber,
-        buttonSize:   d.buttonSize,
-        pickupDate:   d.pickupDate,   // "YYYY-MM-DD"
-        pickupTime:   d.pickupTime,   // "HH:mm"
-        returnDate:   d.returnDate,
-        returnTime:   d.returnTime
+        id: doc.id,
+        name: d.name,
+        email: d.email,
+        phoneNumber: d.phoneNumber,
+        buttonSize: d.buttonSize,
+        pickupDate: d.pickupDate, // "YYYY-MM-DD"
+        pickupTime: d.pickupTime, // "HH:mm"
+        returnDate: d.returnDate,
+        returnTime: d.returnTime,
       };
     });
   } catch (e) {
@@ -276,7 +276,7 @@ async function fetchReservations() {
 }
 
 let currentPage = 1;
-const pageSize   = 4; 
+const pageSize = 4;
 
 // 2️⃣ Build one .box per reservation, append into #reservation_queue
 async function loadReservationQueue() {
@@ -287,15 +287,15 @@ async function loadReservationQueue() {
 
   // clamp currentPage
   if (currentPage > totalPages) currentPage = totalPages;
-  if (currentPage < 1)          currentPage = 1;
+  if (currentPage < 1) currentPage = 1;
 
   // slice out only the items for this page
   const sliceStart = (currentPage - 1) * pageSize;
-  const pageItems  = reservations.slice(sliceStart, sliceStart + pageSize);
+  const pageItems = reservations.slice(sliceStart, sliceStart + pageSize);
 
   // grab your containers
   const queueWrapper = document.getElementById("reservation-queue-container");
-  const queue        = document.getElementById("reservation_queue");
+  const queue = document.getElementById("reservation_queue");
 
   // un-hide the whole panel
   queueWrapper.classList.remove("is-hidden");
@@ -306,7 +306,7 @@ async function loadReservationQueue() {
   if (oldPager) oldPager.remove();
 
   // build boxes for only this page
-  pageItems.forEach(res => {
+  pageItems.forEach((res) => {
     const box = document.createElement("div");
     box.classList.add("box");
     box.innerHTML = `
@@ -315,17 +315,25 @@ async function loadReservationQueue() {
       <p><strong>Email:</strong> ${res.email}</p>
       <p><strong>Phone:</strong> ${res.phoneNumber}</p>
       <p><strong>Button Size:</strong> ${res.buttonSize}"</p>
-      <p><strong>Pickup:</strong> ${new Date(res.pickupDate)
-         .toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"})}
+      <p><strong>Pickup:</strong> ${new Date(res.pickupDate).toLocaleDateString(
+        "en-US",
+        { month: "long", day: "numeric", year: "numeric" }
+      )}
          @ ${res.pickupTime}</p>
-      <p><strong>Return:</strong> ${new Date(res.returnDate)
-         .toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"})}
+      <p><strong>Return:</strong> ${new Date(res.returnDate).toLocaleDateString(
+        "en-US",
+        { month: "long", day: "numeric", year: "numeric" }
+      )}
          @ ${res.returnTime}</p>
       <div class="buttons mt-3">
-        <button class="button is-success" data-id="${res.id}" data-action="accept">
+        <button class="button is-success" data-id="${
+          res.id
+        }" data-action="accept">
           Accept
         </button>
-        <button class="button is-danger"  data-id="${res.id}" data-action="deny">
+        <button class="button is-danger"  data-id="${
+          res.id
+        }" data-action="deny">
           Deny
         </button>
       </div>
@@ -336,7 +344,7 @@ async function loadReservationQueue() {
   // create pagination controls
   const pager = document.createElement("div");
   pager.id = "queue-pagination";
-  pager.classList.add("buttons","are-small","mt-4","is-centered");
+  pager.classList.add("buttons", "are-small", "mt-4", "is-centered");
 
   const prevBtn = document.createElement("button");
   prevBtn.classList.add("button");
@@ -363,17 +371,18 @@ async function loadReservationQueue() {
   queue.parentNode.appendChild(pager);
 
   // (Optional) keep your Accept/Deny handler
-  queue.addEventListener("click", async e => {
+  queue.addEventListener("click", async (e) => {
     const btn = e.target.closest("button[data-id]");
     if (!btn) return;
     const { id, action } = btn.dataset;
-    await db.collection("Reservation").doc(id)
+    await db
+      .collection("Reservation")
+      .doc(id)
       .update({ status: action === "accept" ? "approved" : "denied" });
     // reload current page
     loadReservationQueue();
   });
 }
-
 
 // Java Script Page
 // import { initializeApp } from "firebase/app";
@@ -709,13 +718,13 @@ function message_bar(msg) {
   }, 5000);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const burger = document.querySelector('.navbar-burger');
+document.addEventListener("DOMContentLoaded", () => {
+  const burger = document.querySelector(".navbar-burger");
   const menu = document.getElementById(burger.dataset.target);
 
-  burger.addEventListener('click', () => {
-    burger.classList.toggle('is-active');
-    menu.classList.toggle('is-active');
+  burger.addEventListener("click", () => {
+    burger.classList.toggle("is-active");
+    menu.classList.toggle("is-active");
   });
 });
 
