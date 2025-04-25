@@ -203,9 +203,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const end = res.endDate;
 
         if (thisDate >= start && thisDate <= end) {
-          const label = `${formatTime(res.pickupTime)} - ${res.buttonType} (${
-            res.firstName
-          }); return @ ${formatTime(res.returnTime)}`;
+          const label = `${formatTime(res.pickupTime)} - ${res.buttonType} (${res.firstName
+            }); return @ ${formatTime(res.returnTime)}`;
 
           const bar = document.createElement("div");
 
@@ -275,137 +274,122 @@ async function fetchReservations() {
   }
 }
 
+
 let currentPage = 1;
 const pageSize = 4;
 
-// 2️⃣ Build one .box per reservation, append into #reservation_queue
-async function loadReservationQueue() {
-  const reservations = await fetchReservations();
-
-  // total pages
-  const totalPages = Math.ceil(reservations.length / pageSize);
-
-  // clamp currentPage
-  if (currentPage > totalPages) currentPage = totalPages;
-  if (currentPage < 1) currentPage = 1;
-
-  // slice out only the items for this page
-  const sliceStart = (currentPage - 1) * pageSize;
-  const pageItems = reservations.slice(sliceStart, sliceStart + pageSize);
-
-  // grab your containers
-  const queueWrapper = document.getElementById("reservation-queue-container");
+// 1) Bind once on page load
+document.addEventListener("DOMContentLoaded", () => {
+  // a) Queue click handler
   const queue = document.getElementById("reservation_queue");
+  queue.addEventListener("click", async (e) => {
+    const btn = e.target.closest("button[data-id]");
+    if (!btn) return;
 
-  // un-hide the whole panel
-  queueWrapper.classList.remove("is-hidden");
+    const { id, action } = btn.dataset;
+    const reservationRef = db.collection("Reservation").doc(id);
+    const snap = await reservationRef.get();
+    const data = snap.data();
+    if (!data) return;
 
-  // clear out old items **and** old pagination controls
+    if (action === "accept") {
+      // Only these six fields go into Calendar & acceptedReservation:
+      const payload = {
+        button_type: data.buttonSize,
+        start_date:  data.pickupDate,
+        end_date:    data.returnDate,
+        first_name:  data.name,
+        pickup_time: data.pickupTime,
+        return_time: data.returnTime,
+      };
+
+      // 1a) write to Calendar
+      const calRef = await db.collection("Calendar").add(payload);
+
+      // 1b) write to acceptedReservation (same six + link back)
+      await db.collection("acceptedReservation").add({
+        ...payload,
+        calendarId:     calRef.id,
+        //reservationId:  id,
+        acceptedAt:     new Date().toISOString(),
+      });
+    }
+
+    // 2) delete from Reservation
+    await reservationRef.delete();
+
+    // 3) refresh
+    loadReservationQueue();
+  });
+
+  // b) initial render
+  loadReservationQueue();
+});
+
+
+// 2) Purely DOM construction: fetch → paginate → render
+async function loadReservationQueue() {
+  const reservations = await fetchReservations();  // your existing fetch
+
+  // pagination math
+  const totalPages = Math.max(1, Math.ceil(reservations.length / pageSize));
+  currentPage = Math.min(Math.max(currentPage, 1), totalPages);
+  const startIdx = (currentPage - 1) * pageSize;
+  const pageItems = reservations.slice(startIdx, startIdx + pageSize);
+
+  // grab & clear
+  const wrapper = document.getElementById("reservation-queue-container");
+  const queue   = document.getElementById("reservation_queue");
+  wrapper.classList.remove("is-hidden");
   queue.innerHTML = "";
   const oldPager = document.getElementById("queue-pagination");
   if (oldPager) oldPager.remove();
 
-  // build boxes for only this page
-  pageItems.forEach((res) => {
+  // render boxes
+  pageItems.forEach(res => {
     const box = document.createElement("div");
     box.classList.add("box");
     box.innerHTML = `
       <p class="title is-4">Reservation Request</p>
       <p><strong>Name:</strong> ${res.name}</p>
-      <p><strong>Email:</strong> ${res.email}</p>
       <p><strong>Phone:</strong> ${res.phoneNumber}</p>
       <p><strong>Button Size:</strong> ${res.buttonSize}"</p>
       <p><strong>Pickup:</strong> ${new Date(res.pickupDate).toLocaleDateString(
-        "en-US",
-        { month: "long", day: "numeric", year: "numeric" }
-      )}
-         @ ${res.pickupTime}</p>
+        "en-US",{ month:"long",day:"numeric",year:"numeric"})} @ ${res.pickupTime}</p>
       <p><strong>Return:</strong> ${new Date(res.returnDate).toLocaleDateString(
-        "en-US",
-        { month: "long", day: "numeric", year: "numeric" }
-      )}
-         @ ${res.returnTime}</p>
+        "en-US",{ month:"long",day:"numeric",year:"numeric"})} @ ${res.returnTime}</p>
       <div class="buttons mt-3">
-        <button class="button is-success" data-id="${
-          res.id
-        }" data-action="accept">
-          Accept
-        </button>
-        <button class="button is-danger"  data-id="${
-          res.id
-        }" data-action="deny">
-          Deny
-        </button>
+        <button class="button is-success" data-id="${res.id}" data-action="accept">Accept</button>
+        <button class="button is-danger"  data-id="${res.id}" data-action="deny">Deny</button>
       </div>
     `;
     queue.appendChild(box);
   });
 
-  // create pagination controls
+  // render pager
   const pager = document.createElement("div");
   pager.id = "queue-pagination";
-  pager.classList.add("buttons", "are-small", "mt-4", "is-centered");
+  pager.classList.add("buttons","are-small","mt-4","is-centered");
 
   const prevBtn = document.createElement("button");
   prevBtn.classList.add("button");
   prevBtn.textContent = "← Prev";
   prevBtn.disabled = currentPage === 1;
-  prevBtn.addEventListener("click", () => {
-    currentPage--;
-    loadReservationQueue();
-  });
+  prevBtn.addEventListener("click", () => { currentPage--; loadReservationQueue(); });
 
   const nextBtn = document.createElement("button");
   nextBtn.classList.add("button");
   nextBtn.textContent = "Next →";
   nextBtn.disabled = currentPage === totalPages;
-  nextBtn.addEventListener("click", () => {
-    currentPage++;
-    loadReservationQueue();
-  });
+  nextBtn.addEventListener("click", () => { currentPage++; loadReservationQueue(); });
 
   const info = document.createElement("span");
   info.textContent = `Page ${currentPage} of ${totalPages}`;
 
   pager.append(prevBtn, info, nextBtn);
   queue.parentNode.appendChild(pager);
-
-  // (Optional) keep your Accept/Deny handler
-  queue.addEventListener("click", async (e) => {
-    const btn = e.target.closest("button[data-id]");
-    if (!btn) return;
-
-    const { id, action } = btn.dataset;
-
-    const reservationRef = db.collection("Reservation").doc(id);
-    const reservationDoc = await reservationRef.get();
-    const data = reservationDoc.data();
-
-    if (!data) return;
-
-    if (action === "accept") {
-      const calendarData = {
-        first_name: data.name,
-        button_type: data.buttonSize,
-        start_date: data.pickupDate,
-        pickup_time: data.pickupTime,
-        end_date: data.returnDate,
-        return_time: data.returnTime,
-        email: data.email,
-        phone: data.phone || "",
-      };
-
-      // Add to Calendar
-      await db.collection("Calendar").add(calendarData);
-    }
-
-    // Delete from Reservation collection (regardless of accept/deny)
-    await reservationRef.delete();
-
-    // Refresh queue
-    loadReservationQueue();
-  });
 }
+
 
 // Java Script Page
 // import { initializeApp } from "firebase/app";
