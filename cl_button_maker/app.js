@@ -374,12 +374,35 @@ async function loadReservationQueue() {
   queue.addEventListener("click", async (e) => {
     const btn = e.target.closest("button[data-id]");
     if (!btn) return;
+
     const { id, action } = btn.dataset;
-    await db
-      .collection("Reservation")
-      .doc(id)
-      .update({ status: action === "accept" ? "approved" : "denied" });
-    // reload current page
+
+    const reservationRef = db.collection("Reservation").doc(id);
+    const reservationDoc = await reservationRef.get();
+    const data = reservationDoc.data();
+
+    if (!data) return;
+
+    if (action === "accept") {
+      const calendarData = {
+        first_name: data.name,
+        button_type: data.buttonSize,
+        start_date: data.pickupDate,
+        pickup_time: data.pickupTime,
+        end_date: data.returnDate,
+        return_time: data.returnTime,
+        email: data.email,
+        phone: data.phone || "",
+      };
+
+      // Add to Calendar
+      await db.collection("Calendar").add(calendarData);
+    }
+
+    // Delete from Reservation collection (regardless of accept/deny)
+    await reservationRef.delete();
+
+    // Refresh queue
     loadReservationQueue();
   });
 }
