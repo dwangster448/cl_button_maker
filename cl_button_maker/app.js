@@ -208,16 +208,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
           const bar = document.createElement("div");
 
-          // Assign position + type-based class
+          // Set level and label
           if (res.buttonType === '1"') {
             bar.classList.add("bar-start", "bar-1inch");
           } else if (res.buttonType === '2.25"') {
             bar.classList.add("bar-start", "bar-2_25inch");
           }
 
-          // Only apply the label on the start date
+          // Positioning
           if (thisDate.toDateString() === start.toDateString()) {
             bar.setAttribute("data-label", label);
+            bar.setAttribute("data-reservation", JSON.stringify(res)); // ✅ embed full data
           } else if (thisDate.toDateString() === end.toDateString()) {
             bar.classList.remove("bar-start");
             bar.classList.add("bar-end");
@@ -225,6 +226,10 @@ document.addEventListener("DOMContentLoaded", function () {
             bar.classList.remove("bar-start");
             bar.classList.add("bar-middle");
           }
+
+          // Make it clickable to trigger modal
+          bar.classList.add("clickable-bar");
+          bar.addEventListener("click", () => openReservationModal(res)); // ✅ trigger modal
 
           barContainer.appendChild(bar);
         }
@@ -748,3 +753,69 @@ firebase.auth().onAuthStateChanged((user) => {
     }
   }
 });
+
+// Modal for reservation details
+
+let currentReservationDocId = null;
+
+function openReservationModal(res) {
+  const modal = document.getElementById("reservationModal");
+  const content = document.getElementById("modal-content-body");
+  const deleteBtn = document.getElementById("deleteReservationBtn");
+
+  currentReservationDocId = res.id || null;
+
+  content.innerHTML = `
+    <p><strong>Name:</strong> ${res.firstName || "N/A"}</p>
+    <p><strong>Start:</strong> ${formatDate(res.startDate)}</p>
+    <p><strong>Pickup:</strong> ${formatTime(res.pickupTime)}</p>
+    <p><strong>End:</strong> ${formatDate(res.endDate)}</p>
+    <p><strong>Return:</strong> ${formatTime(res.returnTime)}</p>
+    <p><strong>Button Type:</strong> ${res.buttonType}</p>
+  `;
+
+  if (auth.currentUser) {
+    deleteBtn.classList.remove("is-hidden");
+  } else {
+    deleteBtn.classList.add("is-hidden");
+  }
+
+  modal.classList.add("is-active");
+}
+
+function closeReservationModal() {
+  document.getElementById("reservationModal").classList.remove("is-active");
+}
+
+// Utility formatting helpers
+function formatDate(dateObj) {
+  return new Date(dateObj).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+
+function formatTime(timeStr) {
+  const [hourStr, minuteStr] = timeStr.split(":");
+  let hour = parseInt(hourStr, 10);
+  const minute = minuteStr.padStart(2, "0");
+  const ampm = hour >= 12 ? "PM" : "AM";
+  hour = hour % 12 || 12;
+  return `${hour}:${minute} ${ampm}`;
+}
+
+document
+  .getElementById("deleteReservationBtn")
+  .addEventListener("click", async () => {
+    if (!currentReservationDocId) return;
+
+    try {
+      await db.collection("Calendar").doc(currentReservationDocId).delete();
+      closeReservationModal();
+      renderCalendar(); // refresh calendar view
+      console.log("Reservation deleted.");
+    } catch (err) {
+      console.error("Error deleting reservation:", err);
+    }
+  });
