@@ -18,17 +18,17 @@ function updateUIBasedOnUser(user) {
 
   if (user) {
     // Authenticated state
-    console.log("✅ User logged in:", user.email);
+    console.log("User logged in:", user.email);
     if (adminLoginBtn) adminLoginBtn.style.display = "none";
     if (signOutBtn) signOutBtn.style.display = "inline-block";
     if (formContainer) formContainer.classList.add("is-hidden");
     if (queueContainer) queueContainer.classList.remove("is-hidden");
     if (bookNowBtn) bookNowBtn.setAttribute("href", "booknow.html");
 
-    loadReservationQueue();
+    loadReservationQueue(); // load queue only if user is logged in
   } else {
     // Not authenticated
-    console.log("🚫 No user logged in");
+    console.log("No user logged in");
     if (adminLoginBtn) adminLoginBtn.style.display = "inline-block";
     if (signOutBtn) signOutBtn.style.display = "none";
     if (formContainer) formContainer.classList.remove("is-hidden");
@@ -70,6 +70,20 @@ const queueContainer = document.getElementById("reservation-queue-container");
 //   }
 // });
 
+// message bar
+function message_bar(msg) {
+  const bar = document.getElementById("message_bar");
+  if (!bar) return;
+
+  bar.innerHTML = msg;
+  bar.classList.remove("is-hidden");
+  bar.classList.add("has-background-success");
+
+  setTimeout(() => {
+    bar.classList.add("is-hidden");
+    bar.innerHTML = "";
+  }, 5000);
+}
 // code for the calendar
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -100,12 +114,12 @@ document.addEventListener("DOMContentLoaded", function () {
   // Fetch documents from "Calendar"
   async function fetchReservations() {
     try {
-      const snapshot = await db.collection("Calendar").get(); // No where clause for now
+      const snapshot = await db.collection("Calendar").get();
       const reservations = [];
-
       snapshot.forEach((doc) => {
         const data = doc.data();
         reservations.push({
+          id: doc.id,
           startDate: parseDate(data.start_date),
           endDate: parseDate(data.end_date),
           buttonType: data.button_type,
@@ -114,7 +128,6 @@ document.addEventListener("DOMContentLoaded", function () {
           returnTime: data.return_time,
         });
       });
-
       console.log("✅ Reservations loaded:", reservations);
       return reservations;
     } catch (err) {
@@ -203,8 +216,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const end = res.endDate;
 
         if (thisDate >= start && thisDate <= end) {
-          const label = `${formatTime(res.pickupTime)} - ${res.buttonType} (${res.firstName
-            }); return @ ${formatTime(res.returnTime)}`;
+          const label = `${formatTime(res.pickupTime)} - ${res.buttonType} (${
+            res.firstName
+          }); return @ ${formatTime(res.returnTime)}`;
 
           const bar = document.createElement("div");
 
@@ -218,7 +232,7 @@ document.addEventListener("DOMContentLoaded", function () {
           // Positioning
           if (thisDate.toDateString() === start.toDateString()) {
             bar.setAttribute("data-label", label);
-            bar.setAttribute("data-reservation", JSON.stringify(res)); // ✅ embed full data
+            bar.setAttribute("data-reservation", JSON.stringify(res)); 
           } else if (thisDate.toDateString() === end.toDateString()) {
             bar.classList.remove("bar-start");
             bar.classList.add("bar-end");
@@ -229,7 +243,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           // Make it clickable to trigger modal
           bar.classList.add("clickable-bar");
-          bar.addEventListener("click", () => openReservationModal(res)); // ✅ trigger modal
+          bar.addEventListener("click", () => openReservationModal(res)); // 
 
           barContainer.appendChild(bar);
         }
@@ -279,7 +293,6 @@ async function fetchReservations() {
   }
 }
 
-
 let currentPage = 1;
 const pageSize = 4;
 
@@ -298,43 +311,32 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!data) return;
 
     if (action === "accept") {
-      // Only these six fields go into Calendar & acceptedReservation:
       const payload = {
         button_type: data.buttonSize,
-        start_date:  data.pickupDate,
-        end_date:    data.returnDate,
-        first_name:  data.name,
+        start_date: data.pickupDate,
+        end_date: data.returnDate,
+        first_name: data.name,
         pickup_time: data.pickupTime,
         return_time: data.returnTime,
       };
 
-      // 1a) write to Calendar
       const calRef = await db.collection("Calendar").add(payload);
 
-      // 1b) write to acceptedReservation (same six + link back)
       await db.collection("acceptedReservation").add({
         ...payload,
-        calendarId:     calRef.id,
-        //reservationId:  id,
-        acceptedAt:     new Date().toISOString(),
+        calendarId: calRef.id,
+        acceptedAt: new Date().toISOString(),
       });
     }
 
-    // 2) delete from Reservation
     await reservationRef.delete();
-
-    // 3) refresh
     loadReservationQueue();
   });
-
-  // b) initial render
-  loadReservationQueue();
 });
-
 
 // 2) Purely DOM construction: fetch → paginate → render
 async function loadReservationQueue() {
-  const reservations = await fetchReservations();  // your existing fetch
+  const reservations = await fetchReservations(); // your existing fetch
 
   // pagination math
   const totalPages = Math.max(1, Math.ceil(reservations.length / pageSize));
@@ -344,14 +346,14 @@ async function loadReservationQueue() {
 
   // grab & clear
   const wrapper = document.getElementById("reservation-queue-container");
-  const queue   = document.getElementById("reservation_queue");
+  const queue = document.getElementById("reservation_queue");
   wrapper.classList.remove("is-hidden");
   queue.innerHTML = "";
   const oldPager = document.getElementById("queue-pagination");
   if (oldPager) oldPager.remove();
 
   // render boxes
-  pageItems.forEach(res => {
+  pageItems.forEach((res) => {
     const box = document.createElement("div");
     box.classList.add("box");
     box.innerHTML = `
@@ -360,12 +362,20 @@ async function loadReservationQueue() {
       <p><strong>Phone:</strong> ${res.phoneNumber}</p>
       <p><strong>Button Size:</strong> ${res.buttonSize}"</p>
       <p><strong>Pickup:</strong> ${new Date(res.pickupDate).toLocaleDateString(
-        "en-US",{ month:"long",day:"numeric",year:"numeric"})} @ ${res.pickupTime}</p>
+        "en-US",
+        { month: "long", day: "numeric", year: "numeric" }
+      )} @ ${res.pickupTime}</p>
       <p><strong>Return:</strong> ${new Date(res.returnDate).toLocaleDateString(
-        "en-US",{ month:"long",day:"numeric",year:"numeric"})} @ ${res.returnTime}</p>
+        "en-US",
+        { month: "long", day: "numeric", year: "numeric" }
+      )} @ ${res.returnTime}</p>
       <div class="buttons mt-3">
-        <button class="button is-success" data-id="${res.id}" data-action="accept">Accept</button>
-        <button class="button is-danger"  data-id="${res.id}" data-action="deny">Deny</button>
+        <button class="button is-success" data-id="${
+          res.id
+        }" data-action="accept">Accept</button>
+        <button class="button is-danger"  data-id="${
+          res.id
+        }" data-action="deny">Deny</button>
       </div>
     `;
     queue.appendChild(box);
@@ -374,19 +384,25 @@ async function loadReservationQueue() {
   // render pager
   const pager = document.createElement("div");
   pager.id = "queue-pagination";
-  pager.classList.add("buttons","are-small","mt-4","is-centered");
+  pager.classList.add("buttons", "are-small", "mt-4", "is-centered");
 
   const prevBtn = document.createElement("button");
   prevBtn.classList.add("button");
   prevBtn.textContent = "← Prev";
   prevBtn.disabled = currentPage === 1;
-  prevBtn.addEventListener("click", () => { currentPage--; loadReservationQueue(); });
+  prevBtn.addEventListener("click", () => {
+    currentPage--;
+    loadReservationQueue();
+  });
 
   const nextBtn = document.createElement("button");
   nextBtn.classList.add("button");
   nextBtn.textContent = "Next →";
   nextBtn.disabled = currentPage === totalPages;
-  nextBtn.addEventListener("click", () => { currentPage++; loadReservationQueue(); });
+  nextBtn.addEventListener("click", () => {
+    currentPage++;
+    loadReservationQueue();
+  });
 
   const info = document.createElement("span");
   info.textContent = `Page ${currentPage} of ${totalPages}`;
@@ -394,7 +410,6 @@ async function loadReservationQueue() {
   pager.append(prevBtn, info, nextBtn);
   queue.parentNode.appendChild(pager);
 }
-
 
 // Java Script Page
 // import { initializeApp } from "firebase/app";
@@ -718,18 +733,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// / message bar
-function message_bar(msg) {
-  r_e("message_bar").innerHTML = msg;
-
-  r_e("message_bar").classList.remove("is-hidden");
-
-  setTimeout(() => {
-    r_e("message_bar").classList.add("is-hidden");
-    r_e("message_bar").innerHTML = "";
-  }, 5000);
-}
-
 document.addEventListener("DOMContentLoaded", () => {
   const burger = document.querySelector(".navbar-burger");
   const menu = document.getElementById(burger.dataset.target);
@@ -813,7 +816,12 @@ document
     try {
       await db.collection("Calendar").doc(currentReservationDocId).delete();
       closeReservationModal();
-      renderCalendar(); // refresh calendar view
+      message_bar("Reservation deleted.");
+
+ 
+      setTimeout(() => {
+        renderCalendar(); 
+      }, 500);
       console.log("Reservation deleted.");
     } catch (err) {
       console.error("Error deleting reservation:", err);
