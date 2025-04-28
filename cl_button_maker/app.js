@@ -297,41 +297,46 @@ let currentPage = 1;
 const pageSize = 4;
 
 // 1) Bind once on page load
-document.addEventListener("DOMContentLoaded", () => {
-  // a) Queue click handler
-  const queue = document.getElementById("reservation_queue");
-  queue.addEventListener("click", async (e) => {
-    const btn = e.target.closest("button[data-id]");
-    if (!btn) return;
+const queue = document.getElementById("reservation_queue");
+queue.addEventListener("click", async (e) => {
+  const btn = e.target.closest("button[data-id]");
+  if (!btn) return;
 
-    const { id, action } = btn.dataset;
-    const reservationRef = db.collection("Reservation").doc(id);
-    const snap = await reservationRef.get();
-    const data = snap.data();
-    if (!data) return;
+  const { id, action } = btn.dataset;
+  const reservationRef = db.collection("Reservation").doc(id);
+  const snap = await reservationRef.get();
+  const data = snap.data();
+  if (!data) return;
 
-    if (action === "accept") {
-      const payload = {
-        button_type: data.buttonSize,
-        start_date: data.pickupDate,
-        end_date: data.returnDate,
-        first_name: data.name,
-        pickup_time: data.pickupTime,
-        return_time: data.returnTime,
-      };
+  if (action === "accept") {
+    const payload = {
+      button_type: data.buttonSize,
+      start_date: data.pickupDate,
+      end_date: data.returnDate,
+      first_name: data.name,
+      pickup_time: data.pickupTime,
+      return_time: data.returnTime,
+    };
 
-      const calRef = await db.collection("Calendar").add(payload);
+    const calRef = await db.collection("Calendar").add(payload);
 
-      await db.collection("acceptedReservation").add({
-        ...payload,
-        calendarId: calRef.id,
-        acceptedAt: new Date().toISOString(),
-      });
-    }
+    await db.collection("acceptedReservation").add({
+      ...payload,
+      calendarId: calRef.id,
+      acceptedAt: new Date().toISOString(),
+    });
 
-    await reservationRef.delete();
+    message_bar("Reservation accepted.");
+  } else if (action === "deny") {
+    message_bar("Reservation denied.");
+  }
+
+  await reservationRef.delete();
+
+  // Give time for the message bar to show BEFORE clearing screen
+  setTimeout(() => {
     loadReservationQueue();
-  });
+  }, 500);
 });
 
 // 2) Purely DOM construction: fetch → paginate → render
