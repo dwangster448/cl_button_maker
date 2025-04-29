@@ -128,10 +128,10 @@ document.addEventListener("DOMContentLoaded", function () {
           returnTime: data.return_time,
         });
       });
-      console.log("✅ Reservations loaded:", reservations);
+      console.log("Reservations loaded:", reservations);
       return reservations;
     } catch (err) {
-      console.error("🔥 Error fetching from Calendar collection:", err);
+      console.error("Error fetching from Calendar collection:", err);
       return [];
     }
   }
@@ -139,9 +139,9 @@ document.addEventListener("DOMContentLoaded", function () {
   async function fetchQueueReservations() {
     try {
       const snapshot = await db
-        .collection("Reservation") // ← your queue lives here
-        .where("status", "==", "pending") // optional filter; drop if you want all
-        .orderBy("start_date", "asc") // sort by start date
+        .collection("Reservation")
+        .where("status", "==", "pending")
+        .orderBy("start_date", "asc")
         .get();
 
       return snapshot.docs.map((doc) => {
@@ -158,7 +158,7 @@ document.addEventListener("DOMContentLoaded", function () {
         };
       });
     } catch (err) {
-      console.error("🔥 Error fetching Reservation queue:", err);
+      console.error("Error fetching Reservation queue:", err);
       return [];
     }
   }
@@ -232,7 +232,7 @@ document.addEventListener("DOMContentLoaded", function () {
           // Positioning
           if (thisDate.toDateString() === start.toDateString()) {
             bar.setAttribute("data-label", label);
-            bar.setAttribute("data-reservation", JSON.stringify(res)); 
+            bar.setAttribute("data-reservation", JSON.stringify(res));
           } else if (thisDate.toDateString() === end.toDateString()) {
             bar.classList.remove("bar-start");
             bar.classList.add("bar-end");
@@ -243,7 +243,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           // Make it clickable to trigger modal
           bar.classList.add("clickable-bar");
-          bar.addEventListener("click", () => openReservationModal(res)); // 
+          bar.addEventListener("click", () => openReservationModal(res)); //
 
           barContainer.appendChild(bar);
         }
@@ -337,6 +337,10 @@ queue.addEventListener("click", async (e) => {
   setTimeout(() => {
     loadReservationQueue();
   }, 500);
+
+  setTimeout(() => {
+    location.reload();
+  }, 1500);
 });
 
 // 2) Purely DOM construction: fetch → paginate → render
@@ -823,10 +827,10 @@ document
       closeReservationModal();
       message_bar("Reservation deleted.");
 
- 
       setTimeout(() => {
-        renderCalendar(); 
-      }, 500);
+        location.reload(); // refreshes the whole page
+      }, 1500);
+
       console.log("Reservation deleted.");
     } catch (err) {
       console.error("Error deleting reservation:", err);
