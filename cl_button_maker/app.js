@@ -340,15 +340,12 @@ if (queue) {
 
     await reservationRef.delete();
 
-  // Give time for the message bar to show BEFORE clearing screen
-  setTimeout(() => {
-    loadReservationQueue();
-  }, 500);
-
-  setTimeout(() => {
-    location.reload();
-  }, 1500);
-});
+    // Give time for the message bar to show BEFORE clearing screen
+    setTimeout(() => {
+      loadReservationQueue();
+    }, 500);
+  });
+}
 
 // 2) Purely DOM construction: fetch → paginate → render
 async function loadReservationQueue() {
