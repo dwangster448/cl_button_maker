@@ -285,10 +285,11 @@ async function fetchReservations() {
         email: d.email,
         phoneNumber: d.phoneNumber,
         buttonSize: d.buttonSize,
-        pickupDate: d.pickupDate, // "YYYY-MM-DD"
-        pickupTime: d.pickupTime, // "HH:mm"
+        pickupDate: d.pickupDate,
+        pickupTime: d.pickupTime,
         returnDate: d.returnDate,
         returnTime: d.returnTime,
+        additionalNotes: d.additionalNotes || "",
       };
     });
   } catch (e) {
@@ -312,10 +313,10 @@ if (queue) {
     const reservationRef = db.collection("Reservation").doc(id);
     const snap = await reservationRef.get();
     const data = snap.data();
-    
+
     if (!data) return;
 
-    console.log('reservation interaction:',data, data.phoneNumber, data.email);
+    console.log("reservation interaction:", data, data.phoneNumber, data.email);
 
     if (action === "accept") {
       const payload = {
@@ -386,6 +387,7 @@ async function loadReservationQueue() {
         "en-US",
         { month: "long", day: "numeric", year: "numeric" }
       )} @ ${res.returnTime}</p>
+      <p><strong>Comments:</strong> ${res.additionalNotes || "None"}</p>
       <div class="buttons mt-3">
         <button class="button is-success" data-id="${
           res.id
