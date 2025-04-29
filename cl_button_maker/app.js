@@ -263,14 +263,13 @@ document.addEventListener("DOMContentLoaded", function () {
       renderCalendar();
     });
   }
-  
+
   if (nextButton) {
     nextButton.addEventListener("click", () => {
       currentDate.setMonth(currentDate.getMonth() + 1);
       renderCalendar();
     });
   }
-  
 
   renderCalendar();
 });
@@ -737,6 +736,7 @@ document.addEventListener("DOMContentLoaded", () => {
       returnDate: r_e("return_date").value,
       returnTime: r_e("return_time").value,
       phoneNumber: r_e("res_phone").value,
+      additionalNotes: r_e("additional_notes").value,
     };
 
     db.collection("Reservation")
