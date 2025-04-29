@@ -285,10 +285,11 @@ async function fetchReservations() {
         email: d.email,
         phoneNumber: d.phoneNumber,
         buttonSize: d.buttonSize,
-        pickupDate: d.pickupDate, // "YYYY-MM-DD"
-        pickupTime: d.pickupTime, // "HH:mm"
+        pickupDate: d.pickupDate,
+        pickupTime: d.pickupTime,
         returnDate: d.returnDate,
         returnTime: d.returnTime,
+        additionalNotes: d.additionalNotes || "",
       };
     });
   } catch (e) {
@@ -300,56 +301,71 @@ async function fetchReservations() {
 let currentPage = 1;
 const pageSize = 4;
 
-// 1) Bind once on page load
-const queue = document.getElementById("reservation_queue");
+function fetchQueueReservations() {
+  // 1) Bind once on page load
+  const queue = document.getElementById("reservation_queue");
 
-if (queue) {
-  queue.addEventListener("click", async (e) => {
-    const btn = e.target.closest("button[data-id]");
-    if (!btn) return;
+  if (queue) {
+    queue.addEventListener("click", async (e) => {
+      const btn = e.target.closest("button[data-id]");
+      if (!btn) return;
 
-    const { id, action } = btn.dataset;
-    const reservationRef = db.collection("Reservation").doc(id);
-    const snap = await reservationRef.get();
-    const data = snap.data();
-    
-    if (!data) return;
+      const { id, action } = btn.dataset;
+      const reservationRef = db.collection("Reservation").doc(id);
+      const snap = await reservationRef.get();
+      const data = snap.data();
 
-    console.log('reservation interaction:',data, data.phoneNumber, data.email);
+      if (!data) return;
 
-    if (action === "accept") {
-      const payload = {
-        button_type: data.buttonSize,
-        start_date: data.pickupDate,
-        end_date: data.returnDate,
-        first_name: data.name,
-        pickup_time: data.pickupTime,
-        return_time: data.returnTime,
-      };
+      console.log(
+        "reservation interaction:",
+        data,
+        data.phoneNumber,
+        data.email
+      );
 
-      const calRef = await db.collection("Calendar").add(payload);
+      if (action === "accept") {
+        const payload = {
+          button_type: data.buttonSize,
+          start_date: data.pickupDate,
+          end_date: data.returnDate,
+          first_name: data.name,
+          pickup_time: data.pickupTime,
+          return_time: data.returnTime,
+        };
 
-      await db.collection("acceptedReservation").add({
-        ...payload,
-        calendarId: calRef.id,
-        acceptedAt: new Date().toISOString(),
-        phoneNumber: data.phoneNumber,
-        email: data.email,
-      });
+        const calRef = await db.collection("Calendar").add(payload);
 
-      message_bar("Reservation accepted.");
-    } else if (action === "deny") {
-      message_bar("Reservation denied.");
-    }
+        await db.collection("acceptedReservation").add({
+          ...payload,
+          calendarId: calRef.id,
+          acceptedAt: new Date().toISOString(),
+          phoneNumber: data.phoneNumber,
+          email: data.email,
+        });
 
-    await reservationRef.delete();
+        message_bar("Reservation accepted.");
+      } else if (action === "deny") {
+        message_bar("Reservation denied.");
+      }
 
-    // Give time for the message bar to show BEFORE clearing screen
-    setTimeout(() => {
-      loadReservationQueue();
-    }, 500);
-  });
+      await reservationRef.delete();
+
+      // Give time for the message bar to show BEFORE clearing screen
+      setTimeout(() => {
+        loadReservationQueue();
+      }, 500);
+
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
+
+      fetchQueueReservations();
+    });
+  }
 }
+
+fetchQueueReservations();
 
 // 2) Purely DOM construction: fetch → paginate → render
 async function loadReservationQueue() {
@@ -377,6 +393,7 @@ async function loadReservationQueue() {
       <p class="title is-4">Reservation Request</p>
       <p><strong>Name:</strong> ${res.name}</p>
       <p><strong>Phone:</strong> ${res.phoneNumber}</p>
+      <p><strong>Email:</strong> ${res.email}</p>
       <p><strong>Button Size:</strong> ${res.buttonSize}"</p>
       <p><strong>Pickup:</strong> ${new Date(res.pickupDate).toLocaleDateString(
         "en-US",
@@ -386,6 +403,7 @@ async function loadReservationQueue() {
         "en-US",
         { month: "long", day: "numeric", year: "numeric" }
       )} @ ${res.returnTime}</p>
+      <p><strong>Comments:</strong> ${res.additionalNotes || "None"}</p>
       <div class="buttons mt-3">
         <button class="button is-success" data-id="${
           res.id
@@ -446,17 +464,6 @@ async function loadReservationQueue() {
 
 // const auth = getAuth(app);
 // const db = getFirestore(app);
-
-let first_name = "Daniel";
-let last_name = "Wang";
-
-let user_email = "example@gmail.com";
-let user_phone_number = "2624120000";
-
-let startDate = "06/01/2026"; // current date of reservation
-let endDate = "06/04/2026"; // end date that will be adjusted in reservation
-
-let available = true;
 
 function disclaimer(reservation_data = False) {
   // popup modal that provides user information, reservation dates, and disclaimer notes
@@ -768,6 +775,7 @@ firebase.auth().onAuthStateChanged((user) => {
     if (user) {
       // User is signed in
       bookButton.textContent = "Reservations";
+      fetchQueueReservations();
     } else {
       // User is signed out
       bookButton.textContent = "Book Now";
@@ -838,7 +846,7 @@ document
 
       setTimeout(() => {
         location.reload(); // refreshes the whole page
-      }, 1500);
+      }, 1000);
 
       console.log("Reservation deleted.");
     } catch (err) {
