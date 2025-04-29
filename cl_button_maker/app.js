@@ -216,9 +216,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const end = res.endDate;
 
         if (thisDate >= start && thisDate <= end) {
-          const label = `${formatTime(res.pickupTime)} - ${res.buttonType} (${
-            res.firstName
-          }); return @ ${formatTime(res.returnTime)}`;
+          const label = `${formatTime(res.pickupTime)} - ${res.buttonType} (${res.firstName
+            }); return @ ${formatTime(res.returnTime)}`;
 
           const bar = document.createElement("div");
 
@@ -263,14 +262,14 @@ document.addEventListener("DOMContentLoaded", function () {
       renderCalendar();
     });
   }
-  
+
   if (nextButton) {
     nextButton.addEventListener("click", () => {
       currentDate.setMonth(currentDate.getMonth() + 1);
       renderCalendar();
     });
   }
-  
+
 
   renderCalendar();
 });
@@ -301,56 +300,63 @@ async function fetchReservations() {
 let currentPage = 1;
 const pageSize = 4;
 
-// 1) Bind once on page load
-const queue = document.getElementById("reservation_queue");
+function fetchQueueReservations() {
+  // 1) Bind once on page load
+  const queue = document.getElementById("reservation_queue");
 
-if (queue) {
-  queue.addEventListener("click", async (e) => {
-    const btn = e.target.closest("button[data-id]");
-    if (!btn) return;
+  if (queue) {
+    queue.addEventListener("click", async (e) => {
+      const btn = e.target.closest("button[data-id]");
+      if (!btn) return;
 
-    const { id, action } = btn.dataset;
-    const reservationRef = db.collection("Reservation").doc(id);
-    const snap = await reservationRef.get();
-    const data = snap.data();
+      const { id, action } = btn.dataset;
+      const reservationRef = db.collection("Reservation").doc(id);
+      const snap = await reservationRef.get();
+      const data = snap.data();
+
+      if (!data) return;
+
+      console.log('reservation interaction:', data, data.phoneNumber, data.email);
+
+      if (action === "accept") {
+        const payload = {
+          button_type: data.buttonSize,
+          start_date: data.pickupDate,
+          end_date: data.returnDate,
+          first_name: data.name,
+          pickup_time: data.pickupTime,
+          return_time: data.returnTime,
+        };
+
+        const calRef = await db.collection("Calendar").add(payload);
+
+        await db.collection("acceptedReservation").add({
+          ...payload,
+          calendarId: calRef.id,
+          acceptedAt: new Date().toISOString(),
+          phoneNumber: data.phoneNumber,
+          email: data.email,
+        });
+
+        message_bar("Reservation accepted.");
+      } else if (action === "deny") {
+        message_bar("Reservation denied.");
+      }
+
+      await reservationRef.delete();
+
+      // Give time for the message bar to show BEFORE clearing screen
+      setTimeout(() => {
+        loadReservationQueue();
+      }, 500);
+      
+      fetchQueueReservations();
+    });
     
-    if (!data) return;
-
-    console.log('reservation interaction:',data, data.phoneNumber, data.email);
-
-    if (action === "accept") {
-      const payload = {
-        button_type: data.buttonSize,
-        start_date: data.pickupDate,
-        end_date: data.returnDate,
-        first_name: data.name,
-        pickup_time: data.pickupTime,
-        return_time: data.returnTime,
-      };
-
-      const calRef = await db.collection("Calendar").add(payload);
-
-      await db.collection("acceptedReservation").add({
-        ...payload,
-        calendarId: calRef.id,
-        acceptedAt: new Date().toISOString(),
-        phoneNumber: data.phoneNumber,
-        email: data.email,
-      });
-
-      message_bar("Reservation accepted.");
-    } else if (action === "deny") {
-      message_bar("Reservation denied.");
-    }
-
-    await reservationRef.delete();
-
-    // Give time for the message bar to show BEFORE clearing screen
-    setTimeout(() => {
-      loadReservationQueue();
-    }, 500);
-  });
+  }
 }
+
+fetchQueueReservations();
 
 // 2) Purely DOM construction: fetch → paginate → render
 async function loadReservationQueue() {
@@ -378,22 +384,21 @@ async function loadReservationQueue() {
       <p class="title is-4">Reservation Request</p>
       <p><strong>Name:</strong> ${res.name}</p>
       <p><strong>Phone:</strong> ${res.phoneNumber}</p>
+      <p><strong>Email:</strong> ${res.email}</p>
       <p><strong>Button Size:</strong> ${res.buttonSize}"</p>
       <p><strong>Pickup:</strong> ${new Date(res.pickupDate).toLocaleDateString(
-        "en-US",
-        { month: "long", day: "numeric", year: "numeric" }
-      )} @ ${res.pickupTime}</p>
+      "en-US",
+      { month: "long", day: "numeric", year: "numeric" }
+    )} @ ${res.pickupTime}</p>
       <p><strong>Return:</strong> ${new Date(res.returnDate).toLocaleDateString(
-        "en-US",
-        { month: "long", day: "numeric", year: "numeric" }
-      )} @ ${res.returnTime}</p>
+      "en-US",
+      { month: "long", day: "numeric", year: "numeric" }
+    )} @ ${res.returnTime}</p>
       <div class="buttons mt-3">
-        <button class="button is-success" data-id="${
-          res.id
-        }" data-action="accept">Accept</button>
-        <button class="button is-danger"  data-id="${
-          res.id
-        }" data-action="deny">Deny</button>
+        <button class="button is-success" data-id="${res.id
+      }" data-action="accept">Accept</button>
+        <button class="button is-danger"  data-id="${res.id
+      }" data-action="deny">Deny</button>
       </div>
     `;
     queue.appendChild(box);
@@ -448,16 +453,6 @@ async function loadReservationQueue() {
 // const auth = getAuth(app);
 // const db = getFirestore(app);
 
-let first_name = "Daniel";
-let last_name = "Wang";
-
-let user_email = "example@gmail.com";
-let user_phone_number = "2624120000";
-
-let startDate = "06/01/2026"; // current date of reservation
-let endDate = "06/04/2026"; // end date that will be adjusted in reservation
-
-let available = true;
 
 function disclaimer(reservation_data = False) {
   // popup modal that provides user information, reservation dates, and disclaimer notes
@@ -768,6 +763,7 @@ firebase.auth().onAuthStateChanged((user) => {
     if (user) {
       // User is signed in
       bookButton.textContent = "Reservations";
+      fetchQueueReservations();
     } else {
       // User is signed out
       bookButton.textContent = "Book Now";
