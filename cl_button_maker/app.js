@@ -313,7 +313,10 @@ if (queue) {
     const reservationRef = db.collection("Reservation").doc(id);
     const snap = await reservationRef.get();
     const data = snap.data();
+    
     if (!data) return;
+
+    console.log('reservation interaction:',data, data.phoneNumber, data.email);
 
     if (action === "accept") {
       const payload = {
@@ -331,6 +334,8 @@ if (queue) {
         ...payload,
         calendarId: calRef.id,
         acceptedAt: new Date().toISOString(),
+        phoneNumber: data.phoneNumber,
+        email: data.email,
       });
 
       message_bar("Reservation accepted.");
