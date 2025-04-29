@@ -270,7 +270,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-
   renderCalendar();
 });
 
@@ -285,10 +284,11 @@ async function fetchReservations() {
         email: d.email,
         phoneNumber: d.phoneNumber,
         buttonSize: d.buttonSize,
-        pickupDate: d.pickupDate, // "YYYY-MM-DD"
-        pickupTime: d.pickupTime, // "HH:mm"
+        pickupDate: d.pickupDate,
+        pickupTime: d.pickupTime,
         returnDate: d.returnDate,
         returnTime: d.returnTime,
+        additionalNotes: d.additionalNotes || "",
       };
     });
   } catch (e) {
@@ -391,9 +391,10 @@ async function loadReservationQueue() {
       { month: "long", day: "numeric", year: "numeric" }
     )} @ ${res.pickupTime}</p>
       <p><strong>Return:</strong> ${new Date(res.returnDate).toLocaleDateString(
-      "en-US",
-      { month: "long", day: "numeric", year: "numeric" }
-    )} @ ${res.returnTime}</p>
+        "en-US",
+        { month: "long", day: "numeric", year: "numeric" }
+      )} @ ${res.returnTime}</p>
+      <p><strong>Comments:</strong> ${res.additionalNotes || "None"}</p>
       <div class="buttons mt-3">
         <button class="button is-success" data-id="${res.id
       }" data-action="accept">Accept</button>
@@ -732,6 +733,7 @@ document.addEventListener("DOMContentLoaded", () => {
       returnDate: r_e("return_date").value,
       returnTime: r_e("return_time").value,
       phoneNumber: r_e("res_phone").value,
+      additionalNotes: r_e("additional_notes").value,
     };
 
     db.collection("Reservation")
