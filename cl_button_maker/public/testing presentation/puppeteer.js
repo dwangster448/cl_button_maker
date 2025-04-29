@@ -12,8 +12,9 @@ async function go() {
   });
 
   const page = await browser.newPage();
-  await page.goto("http://127.0.0.1:5500/cl_button_maker/cl_button_maker/booknow.html");
-
+  await page.goto("https://button-maker-510fd.web.app");
+  await page.click("#booknow-button");
+  
   // navbar handler when resized small enough
   const burgerVisible = await page.evaluate(() => {
     const burger = document.querySelector(".navbar-burger");
@@ -24,7 +25,6 @@ async function go() {
     await page.click(".navbar-burger");
     console.log("Navbar expanded");
   }
-
   // Fill out reservation form
   await page.type("#res_name", "Test User");
   await page.type("#res_email", "testuser@example.com");
@@ -38,7 +38,7 @@ async function go() {
   await page.type("#return_time", "15:00PM");
   await page.click("#return_agreement");
   await page.click("#uw_info_agreement");
-  await page.type("#additional_notes", "This is a test comment")
+  await page.type("#additional_notes", "This is a test comment");
 
   await page.click('#review button[type="submit"]');
   console.log("Reservation form submitted");
@@ -67,5 +67,3 @@ async function go() {
 }
 
 go();
-
-
