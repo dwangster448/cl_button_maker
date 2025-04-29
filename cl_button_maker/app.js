@@ -216,8 +216,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const end = res.endDate;
 
         if (thisDate >= start && thisDate <= end) {
-          const label = `${formatTime(res.pickupTime)} - ${res.buttonType} (${res.firstName
-            }); return @ ${formatTime(res.returnTime)}`;
+          const label = `${formatTime(res.pickupTime)} - ${res.buttonType} (${
+            res.firstName
+          }); return @ ${formatTime(res.returnTime)}`;
 
           const bar = document.createElement("div");
 
@@ -316,7 +317,12 @@ function fetchQueueReservations() {
 
       if (!data) return;
 
-      console.log('reservation interaction:', data, data.phoneNumber, data.email);
+      console.log(
+        "reservation interaction:",
+        data,
+        data.phoneNumber,
+        data.email
+      );
 
       if (action === "accept") {
         const payload = {
@@ -349,10 +355,13 @@ function fetchQueueReservations() {
       setTimeout(() => {
         loadReservationQueue();
       }, 500);
-      
+
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
+
       fetchQueueReservations();
     });
-    
   }
 }
 
@@ -387,19 +396,21 @@ async function loadReservationQueue() {
       <p><strong>Email:</strong> ${res.email}</p>
       <p><strong>Button Size:</strong> ${res.buttonSize}"</p>
       <p><strong>Pickup:</strong> ${new Date(res.pickupDate).toLocaleDateString(
-      "en-US",
-      { month: "long", day: "numeric", year: "numeric" }
-    )} @ ${res.pickupTime}</p>
+        "en-US",
+        { month: "long", day: "numeric", year: "numeric" }
+      )} @ ${res.pickupTime}</p>
       <p><strong>Return:</strong> ${new Date(res.returnDate).toLocaleDateString(
         "en-US",
         { month: "long", day: "numeric", year: "numeric" }
       )} @ ${res.returnTime}</p>
       <p><strong>Comments:</strong> ${res.additionalNotes || "None"}</p>
       <div class="buttons mt-3">
-        <button class="button is-success" data-id="${res.id
-      }" data-action="accept">Accept</button>
-        <button class="button is-danger"  data-id="${res.id
-      }" data-action="deny">Deny</button>
+        <button class="button is-success" data-id="${
+          res.id
+        }" data-action="accept">Accept</button>
+        <button class="button is-danger"  data-id="${
+          res.id
+        }" data-action="deny">Deny</button>
       </div>
     `;
     queue.appendChild(box);
@@ -453,7 +464,6 @@ async function loadReservationQueue() {
 
 // const auth = getAuth(app);
 // const db = getFirestore(app);
-
 
 function disclaimer(reservation_data = False) {
   // popup modal that provides user information, reservation dates, and disclaimer notes
@@ -836,7 +846,7 @@ document
 
       setTimeout(() => {
         location.reload(); // refreshes the whole page
-      }, 1500);
+      }, 1000);
 
       console.log("Reservation deleted.");
     } catch (err) {
