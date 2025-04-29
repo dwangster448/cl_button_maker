@@ -12,7 +12,7 @@ async function go() {
   });
 
   const page = await browser.newPage();
-  await page.goto("http://127.0.0.1:5500/cl_button_maker/cl_button_maker/booknow.html");
+  await page.goto("http://127.0.0.1:5500/cl_button_maker/cl_button_maker/public/index.html");
 
   // navbar handler when resized small enough
   const burgerVisible = await page.evaluate(() => {
