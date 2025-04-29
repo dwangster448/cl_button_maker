@@ -1,5 +1,7 @@
 console.log(firebase);
 
+let acceptCallCount = 0;
+
 function waitForAuthInit() {
   return new Promise((resolve) => {
     const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
@@ -136,32 +138,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  async function fetchQueueReservations() {
-    try {
-      const snapshot = await db
-        .collection("Reservation")
-        .where("status", "==", "pending")
-        .orderBy("start_date", "asc")
-        .get();
-
-      return snapshot.docs.map((doc) => {
-        const d = doc.data();
-        return {
-          id: doc.id,
-          firstName: d.first_name,
-          email: d.email,
-          startDate: parseDate(d.start_date),
-          endDate: parseDate(d.end_date),
-          buttonType: d.button_type,
-          pickupTime: d.pickup_time,
-          returnTime: d.return_time,
-        };
-      });
-    } catch (err) {
-      console.error("Error fetching Reservation queue:", err);
-      return [];
-    }
-  }
 
   async function renderCalendar() {
     const year = currentDate.getFullYear();
@@ -216,9 +192,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const end = res.endDate;
 
         if (thisDate >= start && thisDate <= end) {
-          const label = `${formatTime(res.pickupTime)} - ${res.buttonType} (${
-            res.firstName
-          }); return @ ${formatTime(res.returnTime)}`;
+          const label = `${formatTime(res.pickupTime)} - ${res.buttonType} (${res.firstName
+            }); return @ ${formatTime(res.returnTime)}`;
 
           const bar = document.createElement("div");
 
@@ -301,71 +276,54 @@ async function fetchReservations() {
 let currentPage = 1;
 const pageSize = 4;
 
-function fetchQueueReservations() {
-  // 1) Bind once on page load
-  const queue = document.getElementById("reservation_queue");
+async function queueClickHandler(e) {
+  const btn = e.target.closest("button[data-id]");
+  if (!btn) return;
 
-  if (queue) {
-    queue.addEventListener("click", async (e) => {
-      const btn = e.target.closest("button[data-id]");
-      if (!btn) return;
 
-      const { id, action } = btn.dataset;
-      const reservationRef = db.collection("Reservation").doc(id);
-      const snap = await reservationRef.get();
-      const data = snap.data();
+  const { id, action } = btn.dataset;
+  const reservationRef = db.collection("Reservation").doc(id);
+  const snap = await reservationRef.get();
+  const data = snap.data();
 
-      if (!data) return;
+  //     if (!data) return;
+  if (action === "accept") {
+    const payload = {
+      button_type: data.buttonSize,
+      start_date: data.pickupDate,
+      end_date: data.returnDate,
+      first_name: data.name,
+      pickup_time: data.pickupTime,
+      return_time: data.returnTime,
+    };
 
-      console.log(
-        "reservation interaction:",
-        data,
-        data.phoneNumber,
-        data.email
-      );
+    acceptCallCount++;
+    console.log(`Accept handler called ${acceptCallCount} time(s)`);
 
-      if (action === "accept") {
-        const payload = {
-          button_type: data.buttonSize,
-          start_date: data.pickupDate,
-          end_date: data.returnDate,
-          first_name: data.name,
-          pickup_time: data.pickupTime,
-          return_time: data.returnTime,
-        };
+    const calRef = await db.collection("Calendar").add(payload);
 
-        const calRef = await db.collection("Calendar").add(payload);
-
-        await db.collection("acceptedReservation").add({
-          ...payload,
-          calendarId: calRef.id,
-          acceptedAt: new Date().toISOString(),
-          phoneNumber: data.phoneNumber,
-          email: data.email,
-        });
-
-        message_bar("Reservation accepted.");
-      } else if (action === "deny") {
-        message_bar("Reservation denied.");
-      }
-
-      await reservationRef.delete();
-
-      // Give time for the message bar to show BEFORE clearing screen
-      setTimeout(() => {
-        loadReservationQueue();
-      }, 500);
-
-      setTimeout(() => {
-        location.reload();
-      }, 1000);
-
-      fetchQueueReservations();
+    await db.collection("acceptedReservation").add({
+      ...payload,
+      calendarId: calRef.id,
+      acceptedAt: new Date().toISOString(),
+      phoneNumber: data.phoneNumber,
+      email: data.email,
     });
+
+    message_bar("Reservation accepted.");
+  } else if (action === "deny") {
+    message_bar("Reservation denied.");
   }
+
+  await reservationRef.delete();
+  console.log("reservation deleted");
+
+  setTimeout(() => {
+    location.reload();
+  }, 1550);
 }
 
-fetchQueueReservations();
+
 
 // 2) Purely DOM construction: fetch → paginate → render
 async function loadReservationQueue() {
@@ -380,6 +338,8 @@ async function loadReservationQueue() {
   // grab & clear
   const wrapper = document.getElementById("reservation-queue-container");
   const queue = document.getElementById("reservation_queue");
+  queue.addEventListener("click", queueClickHandler);
+
   wrapper.classList.remove("is-hidden");
   queue.innerHTML = "";
   const oldPager = document.getElementById("queue-pagination");
@@ -396,21 +356,19 @@ async function loadReservationQueue() {
       <p><strong>Email:</strong> ${res.email}</p>
       <p><strong>Button Size:</strong> ${res.buttonSize}"</p>
       <p><strong>Pickup:</strong> ${new Date(res.pickupDate).toLocaleDateString(
-        "en-US",
-        { month: "long", day: "numeric", year: "numeric" }
-      )} @ ${res.pickupTime}</p>
+      "en-US",
+      { month: "long", day: "numeric", year: "numeric" }
+    )} @ ${res.pickupTime}</p>
       <p><strong>Return:</strong> ${new Date(res.returnDate).toLocaleDateString(
-        "en-US",
-        { month: "long", day: "numeric", year: "numeric" }
-      )} @ ${res.returnTime}</p>
+      "en-US",
+      { month: "long", day: "numeric", year: "numeric" }
+    )} @ ${res.returnTime}</p>
       <p><strong>Comments:</strong> ${res.additionalNotes || "None"}</p>
       <div class="buttons mt-3">
-        <button class="button is-success" data-id="${
-          res.id
-        }" data-action="accept">Accept</button>
-        <button class="button is-danger"  data-id="${
-          res.id
-        }" data-action="deny">Deny</button>
+        <button class="button is-success" data-id="${res.id
+      }" data-action="accept">Accept</button>
+        <button class="button is-danger"  data-id="${res.id
+      }" data-action="deny">Deny</button>
       </div>
     `;
     queue.appendChild(box);
@@ -446,24 +404,6 @@ async function loadReservationQueue() {
   queue.parentNode.appendChild(pager);
 }
 
-// Java Script Page
-// import { initializeApp } from "firebase/app";
-// import { getAuth } from "firebase/auth";
-// import { getFirestore, collection, addDoc } from "firebase/firestore";
-// import { getDatabase, ref, push, set } from "firebase/database";
-
-// const firebaseConfig = {
-//     apiKey: "YOUR_API_KEY",
-//     authDomain: "YOUR_AUTH_DOMAIN",
-//     projectId: "YOUR_PROJECT_ID",
-//     storageBucket: "YOUR_STORAGE_BUCKET",
-//     messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-//     appId: "YOUR_APP_ID",
-//     measurementId: "YOUR_MEASUREMENT_ID"
-// };
-
-// const auth = getAuth(app);
-// const db = getFirestore(app);
 
 function disclaimer(reservation_data = False) {
   // popup modal that provides user information, reservation dates, and disclaimer notes
@@ -775,7 +715,6 @@ firebase.auth().onAuthStateChanged((user) => {
     if (user) {
       // User is signed in
       bookButton.textContent = "Reservations";
-      fetchQueueReservations();
     } else {
       // User is signed out
       bookButton.textContent = "Book Now";
@@ -787,12 +726,13 @@ firebase.auth().onAuthStateChanged((user) => {
 
 let currentReservationDocId = null;
 
-function openReservationModal(res) {
+async function openReservationModal(res) {
   const modal = document.getElementById("reservationModal");
   const content = document.getElementById("modal-content-body");
   const deleteBtn = document.getElementById("deleteReservationBtn");
 
   currentReservationDocId = res.id || null;
+  console.log("reservationID:", currentReservationDocId);
 
   content.innerHTML = `
     <p><strong>Name:</strong> ${res.firstName || "N/A"}</p>
@@ -808,6 +748,36 @@ function openReservationModal(res) {
   } else {
     deleteBtn.classList.add("is-hidden");
   }
+
+  if (auth.currentUser) {
+    console.log("auth access")
+    try {
+      const snap = await db
+        .collection("acceptedReservation")
+        .where("calendarId", "==", currentReservationDocId)
+        .limit(1)
+        .get();
+
+      if (!snap.empty) {
+        //const { email, phoneNumber } = snap.docs[0].data();
+        selectedReservation = snap.docs[0].data();
+
+        calendarEmail =  selectedReservation.email;
+        calendarNumber = selectedReservation.phoneNumber;
+
+        console.log('calendar,number',calendarEmail,calendarNumber);
+        const contactHtml = `
+          <p><strong>Email:</strong> ${calendarEmail}</p>
+          <p><strong>Phone Number:</strong> ${calendarNumber}</p>
+        `;
+        content.innerHTML += contactHtml;
+      }
+
+    } catch (err) {
+      console.error("Could not load contact info:", err);
+    }
+  }
+
 
   modal.classList.add("is-active");
 }
@@ -837,18 +807,17 @@ function formatTime(timeStr) {
 document
   .getElementById("deleteReservationBtn")
   .addEventListener("click", async () => {
+    console.log("reservationID to be deleted:", currentReservationDocId)
     if (!currentReservationDocId) return;
 
     try {
       await db.collection("Calendar").doc(currentReservationDocId).delete();
       closeReservationModal();
       message_bar("Reservation deleted.");
-
+      console.log("Reservation deleted.");
       setTimeout(() => {
         location.reload(); // refreshes the whole page
-      }, 1000);
-
-      console.log("Reservation deleted.");
+      }, 1500);
     } catch (err) {
       console.error("Error deleting reservation:", err);
     }
