@@ -1,5 +1,3 @@
-console.log(firebase);
-
 let acceptCallCount = 0;
 
 function waitForAuthInit() {
@@ -20,7 +18,6 @@ function updateUIBasedOnUser(user) {
 
   if (user) {
     // Authenticated state
-    console.log("User logged in:", user.email);
     if (adminLoginBtn) adminLoginBtn.style.display = "none";
     if (signOutBtn) signOutBtn.style.display = "inline-block";
     if (formContainer) formContainer.classList.add("is-hidden");
@@ -30,7 +27,6 @@ function updateUIBasedOnUser(user) {
     loadReservationQueue(); // load queue only if user is logged in
   } else {
     // Not authenticated
-    console.log("No user logged in");
     if (adminLoginBtn) adminLoginBtn.style.display = "inline-block";
     if (signOutBtn) signOutBtn.style.display = "none";
     if (formContainer) formContainer.classList.remove("is-hidden");
@@ -44,33 +40,6 @@ const bookNowBtn = document.getElementById("booknow-button");
 const formContainer = document.getElementById("reservation-form-container");
 const queueContainer = document.getElementById("reservation-queue-container");
 
-// auth.onAuthStateChanged(user => {
-//   const adminBtn = document.getElementById('admin-login-button');
-//   const signOutBtn = document.getElementById('sign-out-button');
-//   const formDiv = document.getElementById('reservation-form-container');
-//   const queueDiv = document.getElementById('reservation-queue-container');
-//   const bookNowBtn = document.getElementById('booknow-button');
-
-//   if (user) {
-//     console.log("logged in")
-//     // Admin is signed in
-//     if (adminBtn) adminBtn.style.display = 'none';
-//     if (signOutBtn) signOutBtn.style.display = 'inline-block';
-//     if (formDiv) formDiv.classList.add('is-hidden');
-//     if (queueDiv) queueDiv.classList.remove('is-hidden');
-//     if (bookNowBtn) bookNowBtn.href = 'admin.html';
-//     // load your reservations
-//     if (typeof loadReservations === 'function') loadReservations();
-//   } else {
-//     console.log("logged out")
-//     // No admin signed in
-//     if (adminBtn) adminBtn.style.display = 'inline-block';
-//     if (signOutBtn) signOutBtn.style.display = 'none';
-//     if (formDiv) formDiv.classList.remove('is-hidden');
-//     if (queueDiv) queueDiv.classList.add('is-hidden');
-//     if (bookNowBtn) bookNowBtn.href = 'booknow.html';
-//   }
-// });
 
 // message bar
 function message_bar(msg) {
@@ -97,13 +66,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let currentDate = new Date();
 
-  // Helper to convert string to Date
+  // Converts the string to Date
   function parseDate(str) {
     const [year, month, day] = str.split("-").map(Number);
     return new Date(year, month - 1, day);
   }
 
-  // Helper to format military time to standard time
+  // Formats the time to standard time
   function formatTime(timeStr) {
     const [hourStr, minuteStr] = timeStr.split(":");
     let hour = parseInt(hourStr, 10);
@@ -113,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return `${hour}:${minute} ${ampm}`;
   }
 
-  // Fetch documents from "Calendar"
+  // Fetch documents from Calendar collection
   async function fetchReservations() {
     try {
       const snapshot = await db.collection("Calendar").get();
@@ -130,7 +99,6 @@ document.addEventListener("DOMContentLoaded", function () {
           returnTime: data.return_time,
         });
       });
-      console.log("Reservations loaded:", reservations);
       return reservations;
     } catch (err) {
       console.error("Error fetching from Calendar collection:", err);
@@ -197,7 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           const bar = document.createElement("div");
 
-          // Set level and label
+          // Seting the level and label
           if (res.buttonType === '1"') {
             bar.classList.add("bar-start", "bar-1inch");
           } else if (res.buttonType === '2.25"') {
@@ -298,7 +266,6 @@ async function queueClickHandler(e) {
     };
 
     acceptCallCount++;
-    console.log(`Accept handler called ${acceptCallCount} time(s)`);
 
     const calRef = await db.collection("Calendar").add(payload);
 
@@ -316,7 +283,6 @@ async function queueClickHandler(e) {
   }
 
   await reservationRef.delete();
-  console.log("reservation deleted");
 
   setTimeout(() => {
     location.reload();
@@ -325,9 +291,9 @@ async function queueClickHandler(e) {
 
 
 
-// 2) Purely DOM construction: fetch → paginate → render
+// 2) Purely DOM construction: fetches then paginates then renders
 async function loadReservationQueue() {
-  const reservations = await fetchReservations(); // your existing fetch
+  const reservations = await fetchReservations(); 
 
   // pagination math
   const totalPages = Math.max(1, Math.ceil(reservations.length / pageSize));
@@ -407,34 +373,16 @@ async function loadReservationQueue() {
 
 function disclaimer(reservation_data = False) {
   // popup modal that provides user information, reservation dates, and disclaimer notes
-  console.log("Disclaimer", reservation_data);
 }
 
 function submit_reservation(user_information) {
-  console.log("submit function");
 
   let collection = "reservation_collection";
 
-  return true; //TODO Placeholder to prevent return errors
-
-  // add user information passed onto firebase
-
-  // const db = getDatabase(); //TODO firebase push implementation
-  // const dataRef = ref(db, 'your-data-path'); // Replace 'your-data-path'
-
-  // try {
-  //     // Add a new document with a generated ID
-  //     const docRef = await addDoc(collection(db, {collection}), user_information);
-  //     console.log("Document written with ID: ", docRef.id);
-  //     return true;
-  // } catch(error) {
-  //   console.error("Error pushing data: ", error);
-  //   return False;
-  // };
+  return true; 
 }
 
 function available_dates(start = false, end = false) {
-  console.log("availla");
   // if any of the requested dates are not avaialble, return false
 
   if ((start || end) == false) {
@@ -442,7 +390,7 @@ function available_dates(start = false, end = false) {
     return false;
   }
 
-  let overlapped_dates = true; //TODO add functionality to check overlapping dates
+  let overlapped_dates = true; 
   if (overlapped_dates) {
     // if true = requested dates not available
     return false;
@@ -450,17 +398,14 @@ function available_dates(start = false, end = false) {
 }
 
 function confirmation() {
-  console.log("confirmation detected");
 
   // confirmation pop-up
 
   if (available_dates(startDate, endDate)) {
     // if True = date(s) not available
-    console.log("Overlap dates detected");
     return;
   }
 
-  console.log("herer");
 
   let reservation_data = {
     //JSON to store user data to add onto firebase
@@ -472,7 +417,7 @@ function confirmation() {
     endDate: endDate,
   };
 
-  console.log("----");
+
 
   if (available) {
     try {
@@ -532,7 +477,6 @@ r_e("login_form").addEventListener("submit", (e) => {
       r_e("reservation-page-title").classList.add("is-hidden");
 
       // configure message bar
-      console.log(`Admin ${auth.currentUser.email} is now logged in`);
 
       // reset the form
       r_e("login_form").reset();
@@ -603,37 +547,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       auth.signOut();
     });
   }
-
-  // Attach sign out event to the sign out button
-
-  // signOutButton.addEventListener("click", (e) => {
-
-  //   e.preventDefault();
-
-  //   auth.signOut()
-
-  //     .then(() => {
-
-  //       console.log("User signed out successfully.");
-
-  //       // Optionally, you can update UI elements or redirect the user after sign out.
-
-  //     })
-
-  //     .catch((error) => {
-
-  //       console.error("Error during sign out:", error);
-
-  //     });
-
-  // });
-
-  // (Optional) Additional code handling other UI elements or interactions can go here.
-  // When the Admin Login button is clicked, show the login modal.
 });
 
 r_e("login_form").addEventListener("submit", (e) => {
-  // Prevent page auto-refresh
 
   e.preventDefault();
 
@@ -650,7 +566,6 @@ r_e("login_form").addEventListener("submit", (e) => {
     .signInWithEmailAndPassword(email, password)
 
     .then(() => {
-      console.log(`User ${auth.currentUser.email} is now logged in`);
 
       // Hide the login modal once the user is logged in
 
@@ -666,7 +581,6 @@ r_e("login_form").addEventListener("submit", (e) => {
     });
 });
 
-// Listen for authentication status changes
 
 //  form submission and adding to collection
 document.addEventListener("DOMContentLoaded", () => {
@@ -732,7 +646,6 @@ async function openReservationModal(res) {
   const deleteBtn = document.getElementById("deleteReservationBtn");
 
   currentReservationDocId = res.id || null;
-  console.log("reservationID:", currentReservationDocId);
 
   content.innerHTML = `
     <p><strong>Name:</strong> ${res.firstName || "N/A"}</p>
@@ -750,7 +663,6 @@ async function openReservationModal(res) {
   }
 
   if (auth.currentUser) {
-    console.log("auth access")
     try {
       const snap = await db
         .collection("acceptedReservation")
@@ -759,13 +671,11 @@ async function openReservationModal(res) {
         .get();
 
       if (!snap.empty) {
-        //const { email, phoneNumber } = snap.docs[0].data();
         selectedReservation = snap.docs[0].data();
 
         calendarEmail =  selectedReservation.email;
         calendarNumber = selectedReservation.phoneNumber;
 
-        console.log('calendar,number',calendarEmail,calendarNumber);
         const contactHtml = `
           <p><strong>Email:</strong> ${calendarEmail}</p>
           <p><strong>Phone Number:</strong> ${calendarNumber}</p>
@@ -807,14 +717,12 @@ function formatTime(timeStr) {
 document
   .getElementById("deleteReservationBtn")
   .addEventListener("click", async () => {
-    console.log("reservationID to be deleted:", currentReservationDocId)
     if (!currentReservationDocId) return;
 
     try {
       await db.collection("Calendar").doc(currentReservationDocId).delete();
       closeReservationModal();
       message_bar("Reservation deleted.");
-      console.log("Reservation deleted.");
       setTimeout(() => {
         location.reload(); // refreshes the whole page
       }, 1500);

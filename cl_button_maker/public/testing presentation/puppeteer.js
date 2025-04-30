@@ -32,9 +32,9 @@ async function go() {
 
   await page.click('input[name="button-size"][value="1"]');
 
-  await page.type("#pickup_date", "06-01-2025");
+  await page.type("#pickup_date", "04-01-2025");
   await page.type("#pickup_time", "10:00AM");
-  await page.type("#return_date", "06-03-2025");
+  await page.type("#return_date", "04-03-2025");
   await page.type("#return_time", "15:00PM");
   await page.click("#return_agreement");
   await page.click("#uw_info_agreement");
